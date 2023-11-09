@@ -10,8 +10,8 @@ import utilities as utils
 pygame.init()
 window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.RESIZABLE)
 pygame.display.set_caption('Guido the Snake Charmer')
-font = pygame.font.Font(None, 30)
 clock = pygame.time.Clock()
+font = utils.load_font("Nunito-SemiBold", 32)
 
 # main loop
 while True:
@@ -23,5 +23,6 @@ while True:
 
     window.fill((255, 0, 0))
     utils.render_text("hello world", font, (255, 255, 255), window)
+
     pygame.display.update()
     clock.tick(cfg.TARGET_FPS)
