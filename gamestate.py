@@ -1,3 +1,5 @@
+import scene
+
 # probably bad practice but it works, so whatever
-current_scene = "start"
+current_scene = scene.TestScene()
 timescale = 1

@@ -3,6 +3,9 @@ import sys
 import os
 import gamestate
 
+if not pygame.get_init():
+    pygame.init()
+
 current_path = ""
 if getattr(sys, 'frozen', False): # PyInstaller adds this attribute
     # running in a bundle
@@ -12,7 +15,7 @@ else:
     current_path = os.path.dirname(__file__)
 
 def load_image(name, filetype="png"):
-    """ Load image and return image object"""
+    """Load image and return image object"""
     fullname = os.path.join(current_path, "images", name + os.extsep + filetype)
     try:
         image = pygame.image.load(fullname)
@@ -25,7 +28,7 @@ def load_image(name, filetype="png"):
     return image
 
 def load_audio(name, filetype="mp3"):
-    """ Load audio and return pygame.mixer.Sound object"""
+    """Load audio and return pygame.mixer.Sound object"""
     fullname = os.path.join(current_path, "audio", name + os.extsep + filetype)
     try:
         audio = pygame.mixer.Sound(fullname)
@@ -34,6 +37,7 @@ def load_audio(name, filetype="mp3"):
     return audio
 
 def load_font(name, size, filetype="ttf"):
+    """Load font and return font object"""
     return pygame.font.Font(os.path.join(current_path, "fonts", name + os.extsep + filetype), size)
 
 def render_text(string, font, color, surface, rect=None):
