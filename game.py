@@ -22,7 +22,7 @@ while True:
     gamestate.current_scene.handle_events(pygame.event.get())
 
     # game code here
-    gamestate.current_scene.update(clock.get_time())
+    gamestate.current_scene.update(clock.get_time() / 1000 * gamestate.timescale)
     gamestate.current_scene.render(window)
 
     pygame.display.update()

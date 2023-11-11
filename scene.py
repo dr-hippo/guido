@@ -30,7 +30,7 @@ class TestScene(Scene):
     def render(self, window):
         window.fill((255, 0, 0))
         utils.render_text("hello world", self.font, (255, 255, 255), window)
-        utils.render_text("Delta time: " + str(self.dt / 1000), self.font, (0, 255, 255), window, (50, 100))
+        utils.render_text("Delta time: " + str(self.dt), self.font, (0, 255, 255), window, (50, 100))
 
     def handle_events(self, events):
         for event in events:
