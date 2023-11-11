@@ -6,12 +6,16 @@ import config as cfg
 import gamestate
 import utilities as utils
 import scene
+import snake
 
 # game initialisation
 pygame.init()
 window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.RESIZABLE)
 pygame.display.set_caption('Guido the Snake Charmer')
 clock = pygame.time.Clock()
+
+# set timers
+pygame.time.set_timer(snake.SNAKE_ADVANCE, cfg.SNAKE_ADVANCE_INTERVAL)
 
 # main loop
 while True:
@@ -21,7 +25,7 @@ while True:
 
     gamestate.current_scene.handle_events(pygame.event.get())
 
-    # game code here
+    # game code
     gamestate.current_scene.update(clock.get_time() / 1000 * gamestate.timescale)
     gamestate.current_scene.render(window)
 
