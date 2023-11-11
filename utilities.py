@@ -23,18 +23,18 @@ def load_image(name, filetype="png"):
             image = image.convert()
         else:
             image = image.convert_alpha()
+        return image
     except FileNotFoundError:
         print(f"Cannot find image file at {fullname}")
-    return image
 
 def load_audio(name, filetype="mp3"):
     """Load audio and return pygame.mixer.Sound object"""
     fullname = os.path.join(current_path, "audio", name + os.extsep + filetype)
     try:
         audio = pygame.mixer.Sound(fullname)
+        return audio
     except FileNotFoundError:
         print(f"Cannot find audio file at {fullname}")
-    return audio
 
 def load_font(name, size, filetype="ttf"):
     """Load font and return font object"""
@@ -42,4 +42,4 @@ def load_font(name, size, filetype="ttf"):
 
 def render_text(string, font, color, surface, rect=None):
     text = font.render(string, True, color)
-    surface.blit(text, rect if rect != None else text.get_rect())
+    surface.blit(text, rect if rect is not None else text.get_rect())

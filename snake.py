@@ -1,6 +1,7 @@
 import pygame
 from pygame import Rect, Vector2
 import config as cfg
+import utilities as utils
 
 pygame.init()
 
@@ -11,6 +12,10 @@ class SnakeBlock:
     def __init__(self, position):
         self.position = position
 
+    def update_sprite(self, prev_block, next_block):
+        """Update sprite based on position of adjacent blocks.
+        Previous block is the one closer to the head, next block is the one closer to the tail."""
+        # TODO: Get sprites and decide which is the correct one
 
 class Snake:
     def __init__(self, blocks, direction=Vector2(0, 1)):
@@ -38,15 +43,16 @@ class Snake:
         self.blocks[0].position = new_headpos
 
     def handle_events(self, events):
-        # get key states of WASD keys with list comprehension
-
         for event in events:
             if event.type == SNAKE_ADVANCE:
                 self.advance()
 
             # if event is a keypress on a direction key
             if event.type == pygame.KEYDOWN and event.key in self.direction_dict:
-                self.direction = self.direction_dict[event.key]
+                # make sure moving in direction won't fold snake onto itself
+                if self.blocks[0].position + self.direction_dict[event.key] \
+                        not in [block.position for block in self.blocks[1:]]:
+                    self.direction = self.direction_dict[event.key]
 
     def render(self, window):
         for block in self.blocks:
