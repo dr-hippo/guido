@@ -36,10 +36,15 @@ def load_audio(name, filetype="mp3"):
     except FileNotFoundError:
         print(f"Cannot find audio file at {fullname}")
 
-def load_font(name, size, filetype="ttf"):
-    """Load font and return font object"""
-    return pygame.font.Font(os.path.join(current_path, "fonts", name + os.extsep + filetype), size)
 
-def render_text(string, font, color, surface, rect=None):
+def load_font(name, size, align=pygame.FONT_LEFT, filetype="ttf"):
+    """Load font and return font object"""
+    font = pygame.font.Font(os.path.join(current_path, "fonts", name + os.extsep + filetype), size)
+    font.align = align
+
+    return font
+
+
+def render_text(string, font, color, surface, **kwargs):
     text = font.render(string, True, color)
-    surface.blit(text, rect if rect is not None else text.get_rect())
+    surface.blit(text, text.get_rect(**kwargs))

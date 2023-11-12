@@ -12,6 +12,7 @@ class Scene:
 
     def __init__(self):
         self.inittime = time.time()
+        self.font = utils.load_font("Nunito-SemiBold", 18)
 
     def update(self, dt):
         raise NotImplementedError
@@ -41,7 +42,6 @@ class TestScene(Scene):
 
     def __init__(self):
         super().__init__()
-        self.font = utils.load_font("Nunito-SemiBold", 32)
         self.dt = 0
         self.snake = Snake(
             [SnakeBlock(Vector2(0, 0)), SnakeBlock(Vector2(1, 0)), SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
@@ -54,7 +54,8 @@ class TestScene(Scene):
     def render(self, window):
         window.fill((255, 0, 0))
         utils.render_text("hello world", self.font, (255, 255, 255), window)
-        utils.render_text("Delta time: " + str(self.dt), self.font, (0, 255, 255), window, (50, 100))
+        utils.render_text("Delta time: " + str(self.dt), self.font, (0, 255, 255), window,
+                          center=window.get_rect().center)
         self.snake.render(window)
 
     def handle_events(self, events):
@@ -68,6 +69,7 @@ class StartScreen(Scene):
     def __init__(self):
         super().__init__()
         # TODO: Instantiate title text and start button
+        self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
 
     def update(self, dt):
         # TODO: Text animations (maybe)
@@ -75,13 +77,18 @@ class StartScreen(Scene):
 
     def render(self, window):
         # TODO: Render title text and button
-        window.fill((0, 0, 255))
+        window.fill((255, 255, 255))
+        utils.render_text("Guido the\nSnake Charmer", self.titlefont,
+                          (255, 0, 0), window, top=50, centerx=window.get_rect().centerx)
+        utils.render_text("-Click anywhere to start-", self.font,
+                          (0, 0, 0), window, top=180, centerx=window.get_rect().centerx)
         pass
 
     def handle_events(self, events):
         # TODO: Pipe mousedown events to button(s) so they can be triggered
         for event in events:
-            pass
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.manager.load(TestScene())
 
 
 class Level(Scene):
