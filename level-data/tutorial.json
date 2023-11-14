@@ -1,0 +1,25 @@
+{
+  "name": "Tutorial",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W   WWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W     WW     WWWWWWW",
+    "W     WWWWWW WWWWWWW",
+    "W     WWWWWW WWWWWWW",
+    "W     WWWW   WWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakeTail": [
+    5,
+    6
+  ],
+  "playerPos": []
+}

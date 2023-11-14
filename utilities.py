@@ -14,9 +14,9 @@ else:
     # running in normal python environment
     current_path = os.path.dirname(__file__)
 
-def load_image(name, filetype="png"):
+def load_image(name, filetype="png", *subfolders):
     """Load image and return image object"""
-    fullname = os.path.join(current_path, "images", name + os.extsep + filetype)
+    fullname = os.path.join(current_path, "images", subfolders, name + os.extsep + filetype)
     try:
         image = pygame.image.load(fullname)
         if image.get_alpha() is None:
@@ -27,9 +27,10 @@ def load_image(name, filetype="png"):
     except FileNotFoundError:
         print(f"Cannot find image file at {fullname}")
 
-def load_audio(name, filetype="mp3"):
+
+def load_audio(name, filetype="mp3", *subfolders):
     """Load audio and return pygame.mixer.Sound object"""
-    fullname = os.path.join(current_path, "audio", name + os.extsep + filetype)
+    fullname = os.path.join(current_path, "audio", subfolders, name + os.extsep + filetype)
     try:
         audio = pygame.mixer.Sound(fullname)
         return audio

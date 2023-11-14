@@ -5,6 +5,8 @@ import utilities as utils
 import config as cfg
 import time
 from snake import Snake, SnakeBlock
+from leveldata import LevelData
+import json
 
 
 class Scene:
@@ -88,7 +90,7 @@ class StartScreen(Scene):
         # TODO: Pipe mousedown events to button(s) so they can be triggered
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.manager.load(TestScene())
+                self.manager.load(Level())
 
 
 class Level(Scene):
@@ -97,6 +99,7 @@ class Level(Scene):
         # TODO: Parse level JSON file
         self.snake = None
         self.snakecharmer = None
+        self.data = LevelData("tutorial")
 
     def update(self, dt):
         # TODO: Update snake and snakecharmer
@@ -104,4 +107,12 @@ class Level(Scene):
 
     def render(self, window):
         # TODO: Render snake and player
+        window.fill((0, 0, 255))
+        self.draw_bg()
+        # window.fblits(self.data.get_layout_to_render())
+
+    def draw_bg(self):
+        pass
+
+    def handle_events(self, events):
         pass
