@@ -109,7 +109,7 @@ class Level(Scene):
         # TODO: Render snake and player
         window.fill((0, 0, 255))
         self.draw_bg()
-        # window.fblits(self.data.get_layout_to_render())
+        window.fblits(self.data.get_layout_to_render())
 
     def draw_bg(self):
         pass
