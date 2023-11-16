@@ -3,6 +3,8 @@ import os
 import config as cfg
 import utilities as utils
 from tile import Tile
+from pygame.sprite import Group
+from pygame import Vector2
 
 
 class LevelData:
@@ -18,31 +20,31 @@ class LevelData:
             " ": None
         }
 
-        grid = []
+        self.groups = {
+            "wall": Group(),
+        }
+
+        self.grid = []
 
         # initialise data
         for y in range(len(self._data["layout"])):
-            grid.append([])
+            self.grid.append([])
             for x in range(len(self._data["layout"][y])):
                 # if the key exists and means something
                 if self._data["layout"][y][x] in self.glyphkey.keys():
                     glyph_meaning = self.glyphkey[self._data["layout"][y][x]]
                     if glyph_meaning:
-                        grid[y].append(Tile(glyph_meaning))
+                        # add tile to grid and correct sprite group
+                        tile = Tile(glyph_meaning, Vector2(x, y))
+                        self.grid[y].append(tile)
+                        self.groups[glyph_meaning].add(tile)
 
     def get_layout_to_render(self):
         """Return layout formatted for use in pygame.Surface.fblits call."""
         fblits_data = []
-        for y in range(len(self._data["layout"])):
-            for x in range(len(self._data["layout"][y])):
-                glyph_meaning = self.glyphkey[self._data["layout"][y][x]]
+        for y in range(len(self.grid)):
+            for x in range(len(self.grid[y])):
+                tile = self.grid[y][x]
+                fblits_data.append((tile.image, tile.rect))
 
-                # if char at location means something
-                if glyph_meaning:
-                    fblits_data.append(
-                        (utils.load_image(self.glyphkey[self._data["layout"][y][x]], "tiles"),  # image to blit
-                         (x * cfg.GRIDSIZE, y * cfg.GRIDSIZE)  # position of blit
-                         )
-                    )
-
-        return fblits_data
+        return tuple(fblits_data)

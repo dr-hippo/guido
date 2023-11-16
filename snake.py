@@ -12,7 +12,7 @@ SNAKE_ADVANCE = pygame.event.custom_type()
 
 class SnakeBlock(Tile):
     def __init__(self, position):
-        super().__init__("snake")
+        super().__init__("snake", position)
         self.position = position
         self.image = utils.load_image("snake", "tiles")
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
