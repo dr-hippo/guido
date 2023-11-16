@@ -8,6 +8,8 @@ pygame.init()
 
 
 class SnakeCharmer(Sprite):
-    def __init__(self):
+    def __init__(self, position):
         super().__init__()
-        pass
+        self.position = position
+        self.image = utils.load_image("snakecharmer", "snakecharmer")
+        self.rect = self.image.get_rect(center=position)

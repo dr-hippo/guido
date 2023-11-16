@@ -29,10 +29,10 @@ class Snake:
         self.blocks = OrderedUpdates(blocks)
         self.direction = direction
         self.direction_dict = {
-            pygame.K_w: Vector2(0, -1),  # up
-            pygame.K_s: Vector2(0, 1),  # down
-            pygame.K_a: Vector2(-1, 0),  # left
-            pygame.K_d: Vector2(1, 0),  # right
+            pygame.K_UP: Vector2(0, -1),  # up
+            pygame.K_DOWN: Vector2(0, 1),  # down
+            pygame.K_LEFT: Vector2(-1, 0),  # left
+            pygame.K_RIGHT: Vector2(1, 0),  # right
         }
         self.next_tile_image = utils.load_image("snake-next-tile")
 

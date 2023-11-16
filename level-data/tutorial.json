@@ -3,23 +3,26 @@
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
     "W   WWWWWWWWW    WWW",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "W     WW     WWWWWWW",
+    "W   WWWWWWWWW    WWW",
+    "W   WWWWWWWWW WWWWWW",
+    "W      WWWWW  WWWWWW",
+    "W            WWWWWWW",
     "W     WWWWWW WWWWWWW",
     "W     WWWWWW WWWWWWW",
-    "W     WWWW   WWWWWWW",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "WWWWWWWWWWWWWWWWWWWW",
-    "WWWWWWWW      WWWWWW",
-    "WWWWWWWW      WWWWWW",
-    "WWWWWWWW      WWWWWW"
+    "W            WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WW                WW",
+    "WWWWWWWW          WW",
+    "WWWWWWWWWWWWWWWWWWWW"
   ],
   "snakeTail": [
     5,
     6
   ],
-  "playerPos": []
+  "playerspawn": [
+    160,
+    160
+  ]
 }

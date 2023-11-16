@@ -97,11 +97,11 @@ class StartScreen(Scene):
 class Level(Scene):
     def __init__(self):
         super().__init__()
+        self.data = LevelData("tutorial")
         self.snake = Snake(
             [SnakeBlock(Vector2(0, 0)), SnakeBlock(Vector2(1, 0)), SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
              SnakeBlock(Vector2(2, 2))])
-        self.snakecharmer = SnakeCharmer()
-        self.data = LevelData("tutorial")
+        self.snakecharmer = SnakeCharmer(self.data.playerspawn)
 
     def update(self, dt):
         # TODO: Update snake and snakecharmer
@@ -113,6 +113,7 @@ class Level(Scene):
         self.draw_bg()
         window.fblits(self.data.get_layout_to_render())
         self.snake.render(window)
+        window.blit(self.snakecharmer.image, self.snakecharmer.rect)
 
     def draw_bg(self):
         pass

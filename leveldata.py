@@ -10,7 +10,7 @@ from pygame import Vector2
 class LevelData:
     def __init__(self, filename):
         # open json file with specified name and process it
-        datapath = os.path.join("level-data", filename + os.extsep + "json")
+        datapath = os.path.join(utils.current_path, "level-data", filename + os.extsep + "json")
         rawdata = open(datapath)
         self._data = json.load(rawdata)
         self.glyphkey = {
@@ -19,6 +19,8 @@ class LevelData:
             "P": "player",
             " ": None
         }
+
+        self.playerspawn = self._data["playerspawn"]
 
         self.groups = {
             "wall": Group(),
