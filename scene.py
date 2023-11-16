@@ -107,7 +107,7 @@ class Level(Scene):
 
     def render(self, window):
         # TODO: Render snake and player
-        window.fill((0, 0, 255))
+        window.fill(pygame.Color("skyblue"))
         self.draw_bg()
         window.fblits(self.data.get_layout_to_render())
 
@@ -115,4 +115,6 @@ class Level(Scene):
         pass
 
     def handle_events(self, events):
-        pass
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.manager.load(TestScene())
