@@ -34,6 +34,7 @@ class Snake:
             pygame.K_a: Vector2(-1, 0),  # left
             pygame.K_d: Vector2(1, 0),  # right
         }
+        self.next_tile_image = utils.load_image("snake-next-tile")
 
     def get_next_move(self):
         return self.blocks.sprites()[
@@ -71,8 +72,7 @@ class Snake:
 
     def render(self, window):
         self.blocks.draw(window)
-        pygame.draw.rect(window,
-                         (255, 255, 0),
-                         Rect(self.get_next_move().x * cfg.GRIDSIZE, self.get_next_move().y * cfg.GRIDSIZE,
-                              cfg.GRIDSIZE, cfg.GRIDSIZE),
-                         )
+
+        # draw predicted next tile
+        window.blit(self.next_tile_image,
+                    Vector2(self.get_next_move().x * cfg.GRIDSIZE, self.get_next_move().y * cfg.GRIDSIZE))
