@@ -6,6 +6,7 @@ import config as cfg
 import time
 from snake import Snake, SnakeBlock
 from leveldata import LevelData
+from snakecharmer import SnakeCharmer
 import json
 
 
@@ -96,9 +97,10 @@ class StartScreen(Scene):
 class Level(Scene):
     def __init__(self):
         super().__init__()
-        # TODO: Parse level JSON file
-        self.snake = None
-        self.snakecharmer = None
+        self.snake = Snake(
+            [SnakeBlock(Vector2(0, 0)), SnakeBlock(Vector2(1, 0)), SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
+             SnakeBlock(Vector2(2, 2))])
+        self.snakecharmer = SnakeCharmer()
         self.data = LevelData("tutorial")
 
     def update(self, dt):
@@ -110,11 +112,13 @@ class Level(Scene):
         window.fill(pygame.Color("skyblue"))
         self.draw_bg()
         window.fblits(self.data.get_layout_to_render())
+        self.snake.render(window)
 
     def draw_bg(self):
         pass
 
     def handle_events(self, events):
         for event in events:
+            self.snake.handle_events(events)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(TestScene())
