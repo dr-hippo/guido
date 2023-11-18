@@ -1,4 +1,10 @@
 import pygame
+
+# some code won't work if old pygame is used instead of pygame-ce
+if not getattr(pygame, "IS_CE", False):
+    raise ImportError(
+        """Pygame Community Edition (pygame-ce) is required for this game to run correctly from source.""")
+
 import sys
 import config as cfg
 import gamestate
@@ -9,6 +15,7 @@ import scene
 pygame.init()
 window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.RESIZABLE)
 pygame.display.set_caption('Guido the Snake Charmer')
+pygame.display.set_icon(utils.load_image("topbar-icon"))
 clock = pygame.time.Clock()
 manager = scene.SceneManager()
 

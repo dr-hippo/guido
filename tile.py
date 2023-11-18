@@ -12,5 +12,4 @@ class Tile(Sprite):
         self.position = position
         self.type = tiletype
         self.image = utils.load_image(self.type, "tiles")
-        print(self.image)
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
