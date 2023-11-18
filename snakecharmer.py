@@ -11,7 +11,7 @@ class SnakeCharmer(Sprite):
     def __init__(self, position):
         super().__init__()
         self.image = utils.load_image("snakecharmer", "snakecharmer")
-        self.rect = self.image.get_rect(center=position)
+        self.rect = self.image.get_rect(midbottom=position)
         self.movingleft = False
         self.movingright = False
 

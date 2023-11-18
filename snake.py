@@ -7,9 +7,6 @@ from pygame.sprite import Group
 
 pygame.init()
 
-SNAKE_ADVANCE = pygame.event.custom_type()
-
-
 class SnakeBlock(Tile):
     def __init__(self, position):
         super().__init__("snake", position)
@@ -26,8 +23,6 @@ class SnakeBlock(Tile):
 
 class Snake:
     def __init__(self, blocks, direction=Vector2(0, 1)):
-        # set move timer
-        pygame.time.set_timer(SNAKE_ADVANCE, cfg.SNAKE_ADVANCE_INTERVAL)
         self.blocks = Group(blocks)
         self.direction = direction
         self.direction_dict = {
@@ -36,13 +31,14 @@ class Snake:
             pygame.K_LEFT: Vector2(-1, 0),  # left
             pygame.K_RIGHT: Vector2(1, 0),  # right
         }
+        self.time_since_last_move = 0.0
         self.next_tile_image = utils.load_image("snake-next-tile")
 
     def get_next_move(self):
         return self.blocks.sprites()[
             0].position + self.direction  # where the snake will move next assuming no further input
 
-    def advance(self):
+    def move(self):
         # the head of the snake moves in direction
         new_headpos = self.get_next_move()
 
@@ -60,14 +56,15 @@ class Snake:
                                         self.blocks.sprites()[1],
                                         new_headpos)
 
+        self.time_since_last_move = 0
+
     def update(self, dt):
-        pass
+        self.time_since_last_move += dt
+        if self.time_since_last_move >= cfg.SNAKE_MOVE_INTERVAL:
+            self.move()
 
     def handle_events(self, events):
         for event in events:
-            if event.type == SNAKE_ADVANCE:
-                self.advance()
-
             # if event is a keypress on a direction key
             if event.type == pygame.KEYDOWN and event.key in self.direction_dict:
                 # make sure moving in direction won't fold snake onto itself

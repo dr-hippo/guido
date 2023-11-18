@@ -17,12 +17,8 @@
     "WWWWWWWW          WW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
-  "snakeTail": [
-    5,
-    6
-  ],
   "playerspawn": [
-    160,
-    160
+    5,
+    5
   ]
 }

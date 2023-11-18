@@ -71,7 +71,6 @@ class TestScene(Scene):
 class StartScreen(Scene):
     def __init__(self):
         super().__init__()
-        # TODO: Instantiate title text and start button
         self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
 
     def update(self, dt):
@@ -101,7 +100,9 @@ class Level(Scene):
         self.snake = Snake(
             [SnakeBlock(Vector2(0, 0)), SnakeBlock(Vector2(1, 0)), SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
              SnakeBlock(Vector2(2, 2))])
-        self.snakecharmer = SnakeCharmer(self.data.playerspawn)
+        playerspawn_world_space = Vector2((self.data.playerspawn.x + 0.5) * cfg.GRIDSIZE,  # center of cell vertically
+                                          (self.data.playerspawn.y + 1) * cfg.GRIDSIZE)  # bottom of cell horizontally
+        self.snakecharmer = SnakeCharmer(playerspawn_world_space)
 
     def update(self, dt):
         # TODO: Update snake and snakecharmer

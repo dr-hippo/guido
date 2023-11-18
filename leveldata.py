@@ -20,7 +20,7 @@ class LevelData:
             " ": None
         }
 
-        self.playerspawn = self._data["playerspawn"]
+        self.playerspawn = Vector2(self._data["playerspawn"])
 
         self.groups = {
             "wall": Group(),
