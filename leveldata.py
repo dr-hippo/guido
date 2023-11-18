@@ -5,6 +5,7 @@ import utilities as utils
 from tile import Tile
 from pygame.sprite import Group
 from pygame import Vector2
+from snake import SnakeBlock
 
 
 class LevelData:
@@ -19,6 +20,12 @@ class LevelData:
             "P": "player",
             " ": None
         }
+
+        self.snakedata = []
+
+        # load snake data into list of SnakeBlocks
+        for pos in self._data["snake"]:
+            self.snakedata.append(SnakeBlock(Vector2(pos)))
 
         self.playerspawn = Vector2(self._data["playerspawn"])
 

@@ -1,12 +1,9 @@
 import pygame
-# frequently used types
-from pygame import Rect, Vector2
 import sys
 import config as cfg
 import gamestate
 import utilities as utils
 import scene
-import snake
 
 # game initialisation
 pygame.init()

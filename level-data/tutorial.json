@@ -17,6 +17,32 @@
     "WWWWWWWW          WW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
+  "snake": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ]
+  ],
   "playerspawn": [
     5,
     5

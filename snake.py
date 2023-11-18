@@ -11,9 +11,6 @@ pygame.init()
 class SnakeBlock(Tile):
     def __init__(self, position):
         super().__init__("snake", position)
-        self.position = position
-        self.image = utils.load_image("snake", "tiles")
-        self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
     def update(self, prev_block, next_block, position):
         """Update sprite based on position of adjacent blocks.
@@ -23,7 +20,8 @@ class SnakeBlock(Tile):
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
 class Snake:
-    def __init__(self, environment, blocks, direction=Vector2(0, 1)):
+    def __init__(self, level_grid, environment, blocks, direction=Vector2(0, 1)):
+        self.level_grid = level_grid
         self.environment = environment
         self.blocks = Group(blocks)
         self.direction = direction
@@ -59,7 +57,7 @@ class Snake:
                                         new_headpos)
 
         # check if snake head is inside wall
-        if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.environment.groups["wall"]):
+        if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.environment["wall"]):
             # if so, trigger death event
             # TODO: add death event
             print("died")
@@ -87,7 +85,7 @@ class Snake:
         next_tile_image = self.next_tile_image
 
         # if next move will go into wall, set next tile image to alert
-        next_move_tile = self.environment.grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
+        next_move_tile = self.level_grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
         if next_move_tile and next_move_tile.type == "wall":
             next_tile_image = self.next_tile_alert_image
 
