@@ -10,13 +10,10 @@ import snake
 
 # game initialisation
 pygame.init()
-window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.RESIZABLE)
+window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption('Guido the Snake Charmer')
 clock = pygame.time.Clock()
 manager = scene.SceneManager()
-
-# set timers
-pygame.time.set_timer(snake.SNAKE_ADVANCE, cfg.SNAKE_ADVANCE_INTERVAL)
 
 # main loop
 while True:

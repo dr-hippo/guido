@@ -105,10 +105,10 @@ class Level(Scene):
 
     def update(self, dt):
         # TODO: Update snake and snakecharmer
-        pass
+        self.snake.update(dt)
+        self.snakecharmer.update(dt)
 
     def render(self, window):
-        # TODO: Render snake and player
         window.fill(pygame.Color("skyblue"))
         self.draw_bg()
         window.fblits(self.data.get_layout_to_render())
@@ -121,5 +121,6 @@ class Level(Scene):
     def handle_events(self, events):
         for event in events:
             self.snake.handle_events(events)
+            self.snakecharmer.handle_events(events)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(TestScene())

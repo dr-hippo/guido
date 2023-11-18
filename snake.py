@@ -3,7 +3,7 @@ from pygame import Rect, Vector2
 import config as cfg
 import utilities as utils
 from tile import Tile
-from pygame.sprite import OrderedUpdates
+from pygame.sprite import Group
 
 pygame.init()
 
@@ -26,7 +26,9 @@ class SnakeBlock(Tile):
 
 class Snake:
     def __init__(self, blocks, direction=Vector2(0, 1)):
-        self.blocks = OrderedUpdates(blocks)
+        # set move timer
+        pygame.time.set_timer(SNAKE_ADVANCE, cfg.SNAKE_ADVANCE_INTERVAL)
+        self.blocks = Group(blocks)
         self.direction = direction
         self.direction_dict = {
             pygame.K_UP: Vector2(0, -1),  # up
@@ -55,8 +57,11 @@ class Snake:
 
         # update snake head
         self.blocks.sprites()[0].update(None,
-                                        self.blocks.sprites()[i + 1],
+                                        self.blocks.sprites()[1],
                                         new_headpos)
+
+    def update(self, dt):
+        pass
 
     def handle_events(self, events):
         for event in events:
