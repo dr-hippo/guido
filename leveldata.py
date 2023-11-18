@@ -41,12 +41,16 @@ class LevelData:
                         self.grid[y].append(tile)
                         self.groups[glyph_meaning].add(tile)
 
+                    else:
+                        self.grid[y].append(None)
+
     def get_layout_to_render(self):
         """Return layout formatted for use in pygame.Surface.fblits call."""
         fblits_data = []
         for y in range(len(self.grid)):
             for x in range(len(self.grid[y])):
                 tile = self.grid[y][x]
-                fblits_data.append((tile.image, tile.rect))
+                if tile:
+                    fblits_data.append((tile.image, tile.rect))
 
         return tuple(fblits_data)

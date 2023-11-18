@@ -7,6 +7,7 @@ from pygame.sprite import Group
 
 pygame.init()
 
+
 class SnakeBlock(Tile):
     def __init__(self, position):
         super().__init__("snake", position)
@@ -22,7 +23,8 @@ class SnakeBlock(Tile):
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
 class Snake:
-    def __init__(self, blocks, direction=Vector2(0, 1)):
+    def __init__(self, environment, blocks, direction=Vector2(0, 1)):
+        self.environment = environment
         self.blocks = Group(blocks)
         self.direction = direction
         self.direction_dict = {
@@ -33,10 +35,10 @@ class Snake:
         }
         self.time_since_last_move = 0.0
         self.next_tile_image = utils.load_image("snake-next-tile")
+        self.next_tile_alert_image = utils.load_image("snake-next-tile-alert")
 
     def get_next_move(self):
-        return self.blocks.sprites()[
-            0].position + self.direction  # where the snake will move next assuming no further input
+        return self.blocks.sprites()[0].position + self.direction  # where the snake will move next with no more inputs
 
     def move(self):
         # the head of the snake moves in direction
@@ -55,6 +57,12 @@ class Snake:
         self.blocks.sprites()[0].update(None,
                                         self.blocks.sprites()[1],
                                         new_headpos)
+
+        # check if snake head is inside wall
+        if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.environment.groups["wall"]):
+            # if so, trigger death event
+            # TODO: add death event
+            print("died")
 
         self.time_since_last_move = 0
 
@@ -75,6 +83,13 @@ class Snake:
     def render(self, window):
         self.blocks.draw(window)
 
-        # draw predicted next tile
-        window.blit(self.next_tile_image,
+        # by default, next tile image is normal image
+        next_tile_image = self.next_tile_image
+
+        # if next move will go into wall, set next tile image to alert
+        next_move_tile = self.environment.grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
+        if next_move_tile and next_move_tile.type == "wall":
+            next_tile_image = self.next_tile_alert_image
+
+        window.blit(next_tile_image,
                     Vector2(self.get_next_move().x * cfg.GRIDSIZE, self.get_next_move().y * cfg.GRIDSIZE))

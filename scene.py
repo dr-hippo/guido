@@ -8,6 +8,7 @@ from snake import Snake, SnakeBlock
 from leveldata import LevelData
 from snakecharmer import SnakeCharmer
 import json
+import sys
 
 
 class Scene:
@@ -39,35 +40,6 @@ class SceneManager:
         gamestate.current_scene = scene
         scene.manager = self
 
-
-class TestScene(Scene):
-    """Test scene."""
-
-    def __init__(self):
-        super().__init__()
-        self.dt = 0
-        self.snake = Snake(
-            [SnakeBlock(Vector2(0, 0)), SnakeBlock(Vector2(1, 0)), SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
-             SnakeBlock(Vector2(2, 2))])
-
-    def update(self, dt):
-        self.dt = dt
-        # self.snake.advance()
-
-    def render(self, window):
-        window.fill((255, 0, 0))
-        utils.render_text("hello world", self.font, (255, 255, 255), window)
-        utils.render_text("Delta time: " + str(self.dt), self.font, (0, 255, 255), window,
-                          center=window.get_rect().center)
-        self.snake.render(window)
-
-    def handle_events(self, events):
-        self.snake.handle_events(events)
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.manager.load(StartScreen())
-
-
 class StartScreen(Scene):
     def __init__(self):
         super().__init__()
@@ -82,24 +54,40 @@ class StartScreen(Scene):
         window.fill((255, 255, 255))
         utils.render_text("Guido the\nSnake Charmer", self.titlefont,
                           (255, 0, 0), window, top=50, centerx=window.get_rect().centerx)
-        utils.render_text("-Click anywhere to start-", self.font,
+        utils.render_text("-Any key to start-", self.font,
                           (0, 0, 0), window, top=180, centerx=window.get_rect().centerx)
+        utils.render_text("-Esc to quit-", self.font,
+                          (0, 0, 0), window, top=200, centerx=window.get_rect().centerx)
         pass
 
     def handle_events(self, events):
         # TODO: Pipe mousedown events to button(s) so they can be triggered
         for event in events:
+            if event.type == pygame.KEYDOWN:
+                # quit if escape key pressed
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+                # if any other key pressed load level
+                else:
+                    self.manager.load(Level())
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(Level())
 
+
+# TODO: death scene
 
 class Level(Scene):
     def __init__(self):
         super().__init__()
         self.data = LevelData("tutorial")
-        self.snake = Snake(
-            [SnakeBlock(Vector2(0, 0)), SnakeBlock(Vector2(1, 0)), SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
-             SnakeBlock(Vector2(2, 2))])
+        self.snake = Snake(self.data,
+                           [SnakeBlock(Vector2(1, 1)), SnakeBlock(Vector2(2, 1)),
+                            SnakeBlock(Vector2(2, 2)), SnakeBlock(Vector2(2, 3)),
+                            SnakeBlock(Vector2(2, 4)), SnakeBlock(Vector2(3, 4))
+                            ])
         playerspawn_world_space = Vector2((self.data.playerspawn.x + 0.5) * cfg.GRIDSIZE,  # center of cell vertically
                                           (self.data.playerspawn.y + 1) * cfg.GRIDSIZE)  # bottom of cell horizontally
         self.snakecharmer = SnakeCharmer(playerspawn_world_space)
@@ -124,4 +112,4 @@ class Level(Scene):
             self.snake.handle_events(events)
             self.snakecharmer.handle_events(events)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.manager.load(TestScene())
+                self.manager.load(StartScreen())
