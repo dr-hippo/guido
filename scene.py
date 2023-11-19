@@ -40,6 +40,7 @@ class SceneManager:
         gamestate.current_scene = scene
         scene.manager = self
 
+
 class StartScreen(Scene):
     def __init__(self):
         super().__init__()
@@ -77,7 +78,39 @@ class StartScreen(Scene):
                 self.manager.load(Level())
 
 
-# TODO: death scene
+class DeathScreen(Scene):
+    def __init__(self):
+        super().__init__()
+        self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
+
+    def update(self, dt):
+        # TODO: Text animations (maybe)
+        pass
+
+    def render(self, window):
+        # TODO: Render title text and button
+        window.fill((255, 255, 255))
+        utils.render_text("You died ;(", self.titlefont,
+                          (255, 0, 0), window, top=60, centerx=window.get_rect().centerx)
+        utils.render_text("-Any key to start again-", self.font,
+                          (0, 0, 0), window, top=160, centerx=window.get_rect().centerx)
+        pass
+
+    def handle_events(self, events):
+        # TODO: Pipe mousedown events to button(s) so they can be triggered
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                # quit if escape key pressed
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+                # if any other key pressed load level
+                else:
+                    self.manager.load(StartScreen())
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.manager.load(StartScreen())
 
 class Level(Scene):
     def __init__(self):
@@ -108,4 +141,4 @@ class Level(Scene):
             self.snake.handle_events(events)
             self.snakecharmer.handle_events(events)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.manager.load(StartScreen())
+                self.manager.load(DeathScreen())
