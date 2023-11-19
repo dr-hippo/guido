@@ -11,9 +11,9 @@ pygame.init()
 class SnakeCharmer(Sprite, PhysicsBody):
     def __init__(self, level_grid, environment, position):
         Sprite.__init__(self)
+        PhysicsBody.__init__(self, position)
         self.image = utils.load_image("snakecharmer", "snakecharmer")
         self.rect = self.image.get_rect(midbottom=position)
-        PhysicsBody.__init__(self, self.rect)
         self.level_grid = level_grid
         self.environment = environment
         self.movingleft = False
@@ -23,7 +23,8 @@ class SnakeCharmer(Sprite, PhysicsBody):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    pass
+                    # jump
+                    self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE))
 
                 if event.key == pygame.K_a:
                     self.movingleft = True
@@ -39,12 +40,13 @@ class SnakeCharmer(Sprite, PhysicsBody):
                     self.movingright = False
 
     def update(self, dt):
-        self.physupdate(dt)
-        super().update(dt)
+        Sprite.update(self)
+        PhysicsBody.update(self, dt)
         if self.movingleft:
-            self.addforce(Vector2(-cfg.SNAKECHARMER_MOVE_SPEED, 0))
+            self.position.x -= cfg.SNAKECHARMER_MOVE_SPEED
 
         if self.movingright:
-            self.addforce(Vector2(cfg.SNAKECHARMER_MOVE_SPEED, 0))
+            self.position.x += cfg.SNAKECHARMER_MOVE_SPEED
 
+        self.rect.midbottom = self.position
         self.rect.clamp_ip(pygame.display.get_surface().get_rect())
