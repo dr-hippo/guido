@@ -15,7 +15,7 @@ class Scene:
 
     def __init__(self):
         self.inittime = time.time()
-        self.font = utils.load_font("Nunito-SemiBold", 18)
+        self.font = utils.load_font("Nunito-SemiBold", 20)
 
     def update(self, dt):
         raise NotImplementedError
@@ -114,6 +114,45 @@ class DeathScreen(Scene):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(StartScreen())
 
+
+class WinScreen(Scene):
+    def __init__(self):
+        super().__init__()
+        self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
+        self.infofont = utils.load_font("Nunito-SemiBold", 20, align=pygame.FONT_CENTER)
+
+    def update(self, dt):
+        # TODO: Text animations (maybe)
+        pass
+
+    def render(self, window):
+        # TODO: Render title text and button
+        window.fill((255, 255, 255))
+        utils.render_text(f"Well done! You've\npassed all {len(cfg.LEVELS)} levels!", self.titlefont,
+                          "#efc636", window, top=20, centerx=window.get_rect().centerx)
+        utils.render_text(f"Visit\ndrhippo.itch.io/guido\nfor news and updates.", self.infofont,
+                          (255, 0, 0), window, top=120, centerx=window.get_rect().centerx)
+        utils.render_text("-Any key to go back to start-", self.font,
+                          (0, 0, 0), window, top=210, centerx=window.get_rect().centerx)
+        pass
+
+    def handle_events(self, events):
+        # TODO: Pipe mousedown events to button(s) so they can be triggered
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                # quit if escape key pressed
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+                # if any other key pressed load level
+                else:
+                    self.manager.load(StartScreen())
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.manager.load(StartScreen())
+
+
 class Level(Scene):
     def __init__(self, name):
         super().__init__()
@@ -150,7 +189,7 @@ class Level(Scene):
         if current_index == len(cfg.LEVELS) - 1:
             pass
             # self.manager.load()
-            # TODO: load win screen
+            self.manager.load(WinScreen())
 
         else:
             self.manager.load(Level(cfg.LEVELS[current_index + 1]))
