@@ -31,5 +31,10 @@ while True:
     gamestate.current_scene.update(clock.get_time() / 1000 * gamestate.timescale)
     gamestate.current_scene.render(window)
 
+    if cfg.SHOW_FPS:
+        utils.render_text("FPS: " + str(round(clock.get_fps(), 2)),
+                          utils.load_font(None, 18, pygame.FONT_RIGHT),
+                          (0, 0, 0), window, topright=window.get_rect().topright)
+
     pygame.display.update()
     clock.tick(cfg.TARGET_FPS)

@@ -55,9 +55,12 @@ def load_audio(name, *subfolders, filetype="mp3"):
 
 def load_font(name, size, align=pygame.FONT_LEFT, filetype="ttf"):
     """Load font and return font object"""
-    font = pygame.font.Font(os.path.join(current_path, "fonts", name + os.extsep + filetype), size)
-    font.align = align
+    if name:
+        font = pygame.font.Font(os.path.join(current_path, "fonts", name + os.extsep + filetype), size)
+    else:
+        font = pygame.font.Font(None, size)
 
+    font.align = align
     return font
 
 

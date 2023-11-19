@@ -3,17 +3,19 @@ import utilities as utils
 import pygame
 from pygame.sprite import Sprite, Group
 from pygame import Rect, Vector2
+from physicsbody import PhysicsBody
 
 pygame.init()
 
 
-class SnakeCharmer(Sprite):
+class SnakeCharmer(Sprite, PhysicsBody):
     def __init__(self, level_grid, environment, position):
-        super().__init__()
-        self.level_grid = level_grid
-        self.environment = environment
+        Sprite.__init__(self)
         self.image = utils.load_image("snakecharmer", "snakecharmer")
         self.rect = self.image.get_rect(midbottom=position)
+        PhysicsBody.__init__(self, self.rect)
+        self.level_grid = level_grid
+        self.environment = environment
         self.movingleft = False
         self.movingright = False
 
@@ -37,8 +39,12 @@ class SnakeCharmer(Sprite):
                     self.movingright = False
 
     def update(self, dt):
+        self.physupdate(dt)
+        super().update(dt)
         if self.movingleft:
-            self.rect.centerx -= 1
+            self.addforce(Vector2(-cfg.SNAKECHARMER_MOVE_SPEED, 0))
 
         if self.movingright:
-            self.rect.centerx += 1
+            self.addforce(Vector2(cfg.SNAKECHARMER_MOVE_SPEED, 0))
+
+        self.rect.clamp_ip(pygame.display.get_surface().get_rect())
