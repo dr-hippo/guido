@@ -17,6 +17,10 @@
     "WWWWWWWW          WW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
+  "snakedir": [
+    0,
+    1
+  ],
   "snake": [
     [
       1,

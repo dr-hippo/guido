@@ -65,5 +65,6 @@ def load_font(name, size, align=pygame.FONT_LEFT, filetype="ttf"):
 
 
 def render_text(string, font, color, surface, **kwargs):
+    """Render string in colored font on surface, and position it according to keyword arguments."""
     text = font.render(string, True, color)
     surface.blit(text, text.get_rect(**kwargs))

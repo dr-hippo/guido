@@ -9,13 +9,12 @@ pygame.init()
 
 
 class SnakeCharmer(Sprite, PhysicsBody):
-    def __init__(self, level_grid, environment, position):
+    def __init__(self, scene, position):
         Sprite.__init__(self)
         PhysicsBody.__init__(self, position, velocity=Vector2(0, 0), acceleration=Vector2(0, 0))
+        self.scene = scene
         self.image = utils.load_image("snakecharmer", "snakecharmer")
         self.rect = self.image.get_rect(midbottom=position)
-        self.level_grid = level_grid
-        self.environment = environment
         self.movingleft = False
         self.movingright = False
 

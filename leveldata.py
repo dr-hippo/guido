@@ -16,10 +16,13 @@ class LevelData:
         self._data = json.load(rawdata)
         self.glyphkey = {
             "W": "wall",
-            "S": "snaketail",
+            "A": "apple",
+            "E": "exit",
             "P": "player",
             " ": None
         }
+
+        self.snakedir = self._data["snakedir"]
 
         self.snakedata = []
 
@@ -29,9 +32,10 @@ class LevelData:
 
         self.playerspawn = Vector2(self._data["playerspawn"])
 
-        self.groups = {
-            "wall": Group(),
-        }
+        self.groups = {}
+        for v in self.glyphkey.values():
+            if v:
+                self.groups[v] = Group()
 
         self.grid = []
 

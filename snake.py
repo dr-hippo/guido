@@ -22,11 +22,10 @@ class SnakeBlock(Sprite):
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
 class Snake:
-    def __init__(self, level_grid, environment, blocks, direction=Vector2(0, 1)):
-        self.level_grid = level_grid
-        self.environment = environment
-        self.blocks = Group(blocks)
-        self.direction = direction
+    def __init__(self, scene):
+        self.scene = scene
+        self.blocks = Group(scene.data.snakedata)
+        self.direction = scene.data.snakedir
         self.direction_dict = {
             pygame.K_UP: Vector2(0, -1),  # up
             pygame.K_DOWN: Vector2(0, 1),  # down
@@ -34,6 +33,7 @@ class Snake:
             pygame.K_RIGHT: Vector2(1, 0),  # right
         }
         self.time_since_last_move = 0.0
+
         self.next_tile_image = utils.load_image("snake-next-tile")
         self.next_tile_alert_image = utils.load_image("snake-next-tile-alert")
 
@@ -63,11 +63,12 @@ class Snake:
                                         new_headpos)
 
         # check if snake has collided with a wall or itself
-        if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.environment["wall"]) \
-                or self.occupies(self.blocks.sprites()[0].position, startindex=1):
-            # if so, trigger death event
-            # TODO: add death event
-            print("died")
+        if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.scene.data.groups["wall"]):
+            # if so, trigger death
+            self.scene.on_death("Snake ran into a wall ;(")
+
+        elif self.occupies(self.blocks.sprites()[0].position, startindex=1):
+            self.scene.on_death("Snake ran into itself ;&")
 
         self.time_since_last_move = 0
 
@@ -92,7 +93,7 @@ class Snake:
         next_tile_image = self.next_tile_image
 
         # if next move will go into wall, set next tile image to alert
-        next_move_tile = self.level_grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
+        next_move_tile = self.scene.data.grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
         if next_move_tile and next_move_tile.type == "wall" \
                 or self.occupies(self.get_next_move()):
             next_tile_image = self.next_tile_alert_image
