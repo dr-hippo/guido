@@ -4,10 +4,9 @@ import gamestate
 import utilities as utils
 import config as cfg
 import time
-from snake import Snake, SnakeBlock
+from snake import Snake
 from leveldata import LevelData
 from snakecharmer import SnakeCharmer
-import json
 import sys
 
 
