@@ -7,6 +7,10 @@ from pygame.sprite import Sprite, Group
 pygame.init()
 
 
+def cross_equals(a, b, c, d):
+    return (a == c and b == d) or (a == d and b == c)
+
+
 class SnakeBlock(Sprite):
     def __init__(self, position):
         super().__init__()
@@ -14,12 +18,44 @@ class SnakeBlock(Sprite):
         self.image = utils.load_image("snake", "snake")
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
-    def update(self, prev_block, next_block, position):
+    def update(self, position):
         """Update sprite based on position of adjacent blocks.
         Previous block is the one closer to the head, next block is the one closer to the tail."""
-        # TODO: Get sprites and decide which is the correct one
         self.position = position
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
+
+    def choose_correct_sprite(self, prev_block, next_block):
+        """Choose the correct sprite based on previous and next block"""
+        rel_prevblock = prev_block - self.position if prev_block else None
+        rel_nextblock = next_block - self.position if next_block else None
+        print(rel_prevblock, rel_nextblock)
+
+        block_state = ""
+
+        if cross_equals(rel_prevblock, rel_nextblock, Vector2(0, -1), Vector2(0, 1)):
+            block_state = "vertical"
+
+        elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(1, 0)):
+            block_state = "horizontal"
+
+        elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(0, 1)):
+            block_state = "left-down"
+
+        elif cross_equals(rel_prevblock, rel_nextblock, Vector2(1, 0), Vector2(0, 1)):
+            block_state = "right-down"
+
+        elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(0, -1)):
+            block_state = "left-up"
+
+        elif cross_equals(rel_prevblock, rel_nextblock, Vector2(1, 0), Vector2(0, -1)):
+            block_state = "right-up"
+
+        if block_state:
+            self.image = utils.load_image("snakeblock-" + block_state, "snake")
+
+        else:
+            self.image = utils.load_image("snake", "snake")
+
 
 class Snake:
     def __init__(self, scene):
@@ -51,16 +87,16 @@ class Snake:
         # rest of the snake follows
         for i in range(len(self.blocks) - 1, 0, -1):
             block = self.blocks.sprites()[i]
-            block.update(
-                self.blocks.sprites()[i - 1],
-                self.blocks.sprites()[i + 1] if i != len(self.blocks) - 1 else None,
-                self.blocks.sprites()[i - 1].position
-            )
+            block.update(self.blocks.sprites()[i - 1].position)
 
         # update snake head
-        self.blocks.sprites()[0].update(None,
-                                        self.blocks.sprites()[1],
-                                        new_headpos)
+        self.blocks.sprites()[0].update(new_headpos)
+
+        for j in range(len(self.blocks)):
+            self.blocks.sprites()[j].choose_correct_sprite(
+                self.blocks.sprites()[j - 1].position if j != 0 else None,
+                self.blocks.sprites()[j + 1].position if j != len(self.blocks) - 1 else None
+            )
 
         # check if snake has collided with a wall or itself
         if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.scene.data.groups["wall"]):
