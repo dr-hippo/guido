@@ -51,9 +51,9 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
         self.position.y = pygame.math.clamp(self.position.y, 0, pygame.display.get_surface().get_rect().h)
         self.rect.midbottom = self.position
-        self.check_collisions()
+        self.handle_collisions()
 
-    def check_collisions(self):
+    def handle_collisions(self):
         # if player hits snake head, die
         if pygame.sprite.collide_mask(self, self.scene.snake.blocks.sprites()[0]):
             self.scene.on_death("Snake ate Guido ;(")
@@ -65,3 +65,26 @@ class SnakeCharmer(Sprite, PhysicsBody):
         collided_tiles = pygame.sprite.spritecollide(self, self.scene.data.groups["wall"], False)
         collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake.blocks.sprites()[1:], False)
         self.intersecting_rects = [self.rect.clip(tile.rect) for tile in collided_tiles + collided_snakeblocks]
+        for rect in self.intersecting_rects:
+            collision_direction = {
+                "up": self.rect.top == rect.top,
+                "down": self.rect.bottom == rect.bottom,
+                "left": self.rect.left == rect.left,
+                "right": self.rect.right == rect.right
+            }
+
+            if collision_direction["up"]:
+                self.velocity = Vector2(0, 0)
+                self.position.y += rect.h
+
+            if collision_direction["down"]:
+                self.velocity = Vector2(0, 0)
+                self.position.y -= rect.h
+
+            if collision_direction["left"]:
+                self.velocity = Vector2(0, 0)
+                self.position.x += rect.w
+
+            if collision_direction["right"]:
+                self.velocity = Vector2(0, 0)
+                self.position.x -= rect.w
