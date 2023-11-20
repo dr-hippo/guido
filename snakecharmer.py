@@ -55,9 +55,9 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
     def get_collisions(self):
         collided_tiles = pygame.sprite.spritecollide(self, self.scene.data.groups["wall"], False)
+        collided_apples = pygame.sprite.spritecollide(self, self.scene.data.groups["apple"], False)
         collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake.blocks.sprites()[1:], False)
-
-        return [self.rect.clip(c.rect) for c in collided_tiles + collided_snakeblocks]
+        return [self.rect.clip(c.rect) for c in collided_tiles + collided_apples + collided_snakeblocks]
 
     def get_collision_directions(self, rect):
         return {

@@ -88,7 +88,6 @@ class DeathScreen(Scene):
         pass
 
     def render(self, window):
-        # TODO: Render title text and button
         window.fill((255, 255, 255))
         utils.render_text(f"RIP Guido + Snake", self.titlefont,
                           (255, 0, 0), window, top=60, centerx=window.get_rect().centerx)
@@ -126,7 +125,6 @@ class WinScreen(Scene):
         pass
 
     def render(self, window):
-        # TODO: Render title text and button
         window.fill((255, 255, 255))
         utils.render_text(f"Well done! You've\npassed all {len(cfg.LEVELS)} levels!", self.titlefont,
                           "#efc636", window, top=20, centerx=window.get_rect().centerx)
