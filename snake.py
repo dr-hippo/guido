@@ -29,7 +29,6 @@ class SnakeBlock(Sprite):
         """Choose the correct sprite based on previous and next block"""
         rel_prevblock = prev_block - self.position if prev_block else None
         rel_nextblock = next_block - self.position if next_block else None
-        print(rel_prevblock, rel_nextblock)
 
         block_state = ""
 

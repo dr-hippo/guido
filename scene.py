@@ -173,8 +173,6 @@ class Level(Scene):
         window.fblits(self.data.get_layout_to_render())
         self.snake.render(window)
         window.blit(self.snakecharmer.image, self.snakecharmer.rect)
-        for r in self.snakecharmer.intersecting_rects:
-            pygame.draw.rect(pygame.display.get_surface(), (255, 0, 255), r)
 
     def draw_bg(self):
         pass
