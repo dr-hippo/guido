@@ -17,11 +17,12 @@ class SnakeCharmer(Sprite, PhysicsBody):
         self.rect = self.image.get_rect(midbottom=position)
         self.movingleft = False
         self.movingright = False
+        self.intersecting_rects = []
 
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_w or event.key == pygame.K_SPACE:
                     # jump
                     self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
 
@@ -49,3 +50,8 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
         self.position.y = pygame.math.clamp(self.position.y, 0, pygame.display.get_surface().get_rect().h)
         self.rect.midbottom = self.position
+        self.check_collisions()
+
+    def check_collisions(self):
+        collided_tiles = pygame.sprite.spritecollide(self, self.scene.data.groups["wall"], False)
+        self.intersecting_rects = [self.rect.clip(tile.rect) for tile in collided_tiles]
