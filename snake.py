@@ -16,6 +16,7 @@ class SnakeBlock(Sprite):
         super().__init__()
         self.position = position
         self.image = utils.load_image("snake", "snake")
+        self.mask = pygame.mask.Mask((cfg.GRIDSIZE, cfg.GRIDSIZE))
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
     def update(self, position):
@@ -33,25 +34,58 @@ class SnakeBlock(Sprite):
         block_state = ""
 
         if cross_equals(rel_prevblock, rel_nextblock, Vector2(0, -1), Vector2(0, 1)):
-            block_state = "vertical"
+            block_state = "block-vertical"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(1, 0)):
-            block_state = "horizontal"
+            block_state = "block-horizontal"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(0, 1)):
-            block_state = "left-down"
+            block_state = "block-left-down"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(1, 0), Vector2(0, 1)):
-            block_state = "right-down"
+            block_state = "block-right-down"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(0, -1)):
-            block_state = "left-up"
+            block_state = "block-left-up"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(1, 0), Vector2(0, -1)):
-            block_state = "right-up"
+            block_state = "block-right-up"
+
+        # no previous block --> this block is the head
+        # TODO: if I ever update to python 3.10, use a match-case block
+        elif not rel_prevblock:
+            block_state += "-head-"
+            if rel_nextblock == Vector2(0, 1):
+                block_state += "up"
+
+            elif rel_nextblock == Vector2(0, -1):
+                block_state += "down"
+
+            elif rel_nextblock == Vector2(1, 0):
+                block_state += "left"
+
+            elif rel_nextblock == Vector2(-1, 0):
+                block_state += "right"
+
+        # no next block --> this block is the tail
+        # TODO: if I ever update to python 3.10, use a match-case block
+        elif not rel_nextblock:
+            block_state += "-tail-"
+            if rel_prevblock == Vector2(0, 1):
+                block_state += "up"
+
+            elif rel_prevblock == Vector2(0, -1):
+                block_state += "down"
+
+            elif rel_prevblock == Vector2(1, 0):
+                block_state += "left"
+
+            elif rel_prevblock == Vector2(-1, 0):
+                block_state += "right"
 
         if block_state:
-            self.image = utils.load_image("snakeblock-" + block_state, "snake")
+            self.image = utils.load_image("snake" + block_state, "snake")
+            self.mask = pygame.mask.from_surface(self.image)
 
         else:
             self.image = utils.load_image("snake", "snake")
@@ -73,6 +107,8 @@ class Snake:
         self.next_tile_image = utils.load_image("snake-next-tile")
         self.next_tile_alert_image = utils.load_image("snake-next-tile-alert")
 
+        self.update_block_images()
+
     def get_next_move(self):
         return self.blocks.sprites()[0].position + self.direction  # where the snake will move next with no more inputs
 
@@ -92,11 +128,7 @@ class Snake:
         # update snake head
         self.blocks.sprites()[0].update(new_headpos)
 
-        for j in range(len(self.blocks)):
-            self.blocks.sprites()[j].choose_correct_sprite(
-                self.blocks.sprites()[j - 1].position if j != 0 else None,
-                self.blocks.sprites()[j + 1].position if j != len(self.blocks) - 1 else None
-            )
+        self.update_block_images()
 
         # check if snake has collided with a wall or itself
         if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.scene.data.groups["wall"]):
@@ -112,6 +144,13 @@ class Snake:
         self.time_since_last_move += dt
         if self.time_since_last_move >= cfg.SNAKE_MOVE_INTERVAL:
             self.move()
+
+    def update_block_images(self):
+        for j in range(len(self.blocks)):
+            self.blocks.sprites()[j].choose_correct_sprite(
+                self.blocks.sprites()[j - 1].position if j != 0 else None,
+                self.blocks.sprites()[j + 1].position if j != len(self.blocks) - 1 else None
+            )
 
     def handle_events(self, events):
         for event in events:
