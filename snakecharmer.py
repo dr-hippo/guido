@@ -68,7 +68,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         }
 
     def groundcheck(self):
-        # check if left and right bottom corners are part of base
+        # check if one pixel beneath left or right bottom corners is ground
         return
 
     def handle_collisions(self):
@@ -104,7 +104,6 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
             if self.get_collision_directions(rect)["left"]:
                 self.position.x += rect.w
-                print(rect.w)
                 self.rect.midbottom = self.position
                 if self.rect.clip(rect).size == (0, 0):
                     continue

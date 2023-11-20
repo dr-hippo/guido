@@ -118,6 +118,7 @@ class Snake:
     def move(self):
         # the head of the snake moves in direction
         new_headpos = self.get_next_move()
+        position_to_add_block = self.blocks.sprites()[-1].position
 
         # rest of the snake follows
         for i in range(len(self.blocks) - 1, 0, -1):
@@ -126,7 +127,6 @@ class Snake:
 
         # update snake head
         self.blocks.sprites()[0].update(new_headpos)
-
         self.update_block_images()
 
         # check if snake has collided with a wall or itself
@@ -136,6 +136,14 @@ class Snake:
 
         elif self.occupies(self.blocks.sprites()[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")
+
+        # check if snake has collided with an apple, if so increase its length
+        collided_apple = pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.scene.data.groups["apple"])
+        if collided_apple:
+            self.blocks.add(SnakeBlock(position_to_add_block))
+            self.update_block_images()
+            self.scene.data.groups["apple"].remove(collided_apple)
+            self.scene.data.empty(self.blocks.sprites()[0].position)
 
         self.time_since_last_move = 0
 

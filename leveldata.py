@@ -54,6 +54,9 @@ class LevelData:
                     else:
                         self.grid[y].append(None)
 
+    def empty(self, position):
+        self.grid[int(position.y)][int(position.x)] = None
+
     def get_layout_to_render(self):
         """Return layout formatted for use in pygame.Surface.fblits call."""
         fblits_data = []
