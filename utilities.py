@@ -14,6 +14,7 @@ else:
     # running in normal python environment
     current_path = os.path.dirname(__file__)
 
+
 def load_image(name, *subfolders, filetype="png"):
     """Load image and return image object"""
     if subfolders:

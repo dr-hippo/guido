@@ -17,8 +17,7 @@ class LevelData:
         self.glyphkey = {
             "W": "wall",
             "A": "apple",
-            "E": "exit",
-            "P": "player",
+            "G": "goal",
             " ": None
         }
 

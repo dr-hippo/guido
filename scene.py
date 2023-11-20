@@ -93,7 +93,7 @@ class DeathScreen(Scene):
         utils.render_text(f"RIP Guido + Snake", self.titlefont,
                           (255, 0, 0), window, top=60, centerx=window.get_rect().centerx)
         utils.render_text(self.deathcause, self.font,
-                          (255, 0, 0), window, top=120, centerx=window.get_rect().centerx)
+                          (128, 128, 128), window, top=120, centerx=window.get_rect().centerx)
         utils.render_text("-Any key to start again-", self.font,
                           (0, 0, 0), window, top=160, centerx=window.get_rect().centerx)
         pass
@@ -184,8 +184,6 @@ class Level(Scene):
         for event in events:
             self.snake.handle_events(events)
             self.snakecharmer.handle_events(events)
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.to_nextlevel()
 
     def to_nextlevel(self):
         current_index = cfg.LEVELS.index(self.name)
