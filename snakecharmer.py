@@ -24,8 +24,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w or event.key == pygame.K_SPACE:
-                    # jump
-                    self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
+                    self.jump()
 
                 if event.key == pygame.K_a:
                     self.movingleft = True
@@ -53,19 +52,15 @@ class SnakeCharmer(Sprite, PhysicsBody):
         self.rect.midbottom = self.position
         self.handle_collisions()
 
+    def jump(self):
+        self.velocity.y = -cfg.SNAKECHARMER_JUMP_FORCE
+        # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
+
     def get_collisions(self):
         collided_tiles = pygame.sprite.spritecollide(self, self.scene.data.groups["wall"], False)
         collided_apples = pygame.sprite.spritecollide(self, self.scene.data.groups["apple"], False)
         collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake.blocks.sprites()[1:], False)
         return [self.rect.clip(c.rect) for c in collided_tiles + collided_apples + collided_snakeblocks]
-
-    def get_collision_directions(self, rect):
-        return {
-            "up": self.rect.top == rect.top,
-            "down": self.rect.bottom == rect.bottom,
-            "left": self.rect.left == rect.left,
-            "right": self.rect.right == rect.right
-        }
 
     def groundcheck(self):
         # check if one pixel beneath left or right bottom corners is ground
@@ -89,14 +84,14 @@ class SnakeCharmer(Sprite, PhysicsBody):
                 continue
 
             if rect.w > rect.h:
-                if self.get_collision_directions(rect)["up"]:
+                if self.rect.top == rect.top:
                     self.velocity = Vector2(0, 0)
                     self.position.y += rect.h
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
                         continue
 
-                if self.get_collision_directions(rect)["down"]:
+                if self.rect.bottom == rect.bottom:
                     self.velocity = Vector2(0, 0)
                     self.position.y -= rect.h
                     self.rect.midbottom = self.position
@@ -104,13 +99,13 @@ class SnakeCharmer(Sprite, PhysicsBody):
                         continue
 
             else:
-                if self.get_collision_directions(rect)["left"]:
+                if self.rect.left == rect.left:
                     self.position.x += rect.w
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
                         continue
 
-                if self.get_collision_directions(rect)["right"]:
+                if self.rect.right == rect.right:
                     self.position.x -= rect.w
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):

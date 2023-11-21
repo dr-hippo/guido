@@ -25,6 +25,7 @@ class PhysicsBody:
 
         for impulse in self.impulses:
             totalforce += impulse
+            print(timestep)
 
         self.impulses = []
 
@@ -33,8 +34,10 @@ class PhysicsBody:
         self.velocity += self.acceleration * timestep
         self.position += ((oldvel + self.velocity) / 2) * timestep
 
+    # TODO: Make this work properly
     def addforce(self, vector, impulse=False):
         if impulse:
             self.impulses.append(vector)
+
         else:
             self.forces.append(vector)
