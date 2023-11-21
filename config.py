@@ -8,5 +8,5 @@ LEVELS = ["tutorial", "level2"]
 GRIDSIZE = 16
 SNAKE_MOVE_INTERVAL = 0.9  # in seconds
 GRAVSTRENGTH = 100
-SNAKECHARMER_MOVE_SPEED = 2  # in grid-squares/second
+SNAKECHARMER_MOVE_SPEED = 2.5  # in grid-squares/second
 SNAKECHARMER_JUMP_FORCE = 3000

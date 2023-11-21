@@ -88,31 +88,33 @@ class SnakeCharmer(Sprite, PhysicsBody):
             if self.rect.clip(rect).size == (0, 0):
                 continue
 
-            if self.get_collision_directions(rect)["up"]:
-                self.velocity = Vector2(0, 0)
-                self.position.y += rect.h
-                self.rect.midbottom = self.position
-                if self.rect.clip(rect).size == (0, 0):
-                    continue
+            if rect.w > rect.h:
+                if self.get_collision_directions(rect)["up"]:
+                    self.velocity = Vector2(0, 0)
+                    self.position.y += rect.h
+                    self.rect.midbottom = self.position
+                    if self.rect.clip(rect).size == (0, 0):
+                        continue
 
-            if self.get_collision_directions(rect)["down"]:
-                self.velocity = Vector2(0, 0)
-                self.position.y -= rect.h
-                self.rect.midbottom = self.position
-                if self.rect.clip(rect).size == (0, 0):
-                    continue
+                if self.get_collision_directions(rect)["down"]:
+                    self.velocity = Vector2(0, 0)
+                    self.position.y -= rect.h
+                    self.rect.midbottom = self.position
+                    if self.rect.clip(rect).size == (0, 0):
+                        continue
 
-            if self.get_collision_directions(rect)["left"]:
-                self.position.x += rect.w
-                self.rect.midbottom = self.position
-                if self.rect.clip(rect).size == (0, 0):
-                    continue
+            else:
+                if self.get_collision_directions(rect)["left"]:
+                    self.position.x += rect.w
+                    self.rect.midbottom = self.position
+                    if self.rect.clip(rect).size == (0, 0):
+                        continue
 
-            if self.get_collision_directions(rect)["right"]:
-                self.position.x -= rect.w
-                self.rect.midbottom = self.position
-                if self.rect.clip(rect).size == (0, 0):
-                    continue
+                if self.get_collision_directions(rect)["right"]:
+                    self.position.x -= rect.w
+                    self.rect.midbottom = self.position
+                    if self.rect.clip(rect).size == (0, 0):
+                        continue
 
             self.intersecting_rects = self.get_collisions()
 
