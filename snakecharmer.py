@@ -23,7 +23,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w or event.key == pygame.K_SPACE:
+                if (event.key == pygame.K_w or event.key == pygame.K_SPACE) and self.groundcheck():
                     self.jump()
 
                 if event.key == pygame.K_a:
@@ -53,6 +53,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         self.handle_collisions()
 
     def jump(self):
+        # TODO: this is a temporary fix, need to make addforce consistent
         self.velocity.y = -cfg.SNAKECHARMER_JUMP_FORCE
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
 
@@ -63,8 +64,17 @@ class SnakeCharmer(Sprite, PhysicsBody):
         return [self.rect.clip(c.rect) for c in collided_tiles + collided_apples + collided_snakeblocks]
 
     def groundcheck(self):
-        # check if one pixel beneath left or right bottom corners is ground
-        return
+        # check if one pixel beneath left or right bottom corners is ground (wall, snake, or apple)
+        rects = [sprite.rect for sprite in self.scene.snake.blocks.sprites()[1:]] + \
+                [sprite.rect for sprite in self.scene.data.groups["wall"].sprites()] + \
+                [sprite.rect for sprite in self.scene.data.groups["apple"].sprites()]
+
+        for rect in rects:
+            if rect.collidepoint(self.rect.bottomleft) or \
+                    rect.collidepoint(self.rect.bottomright):
+                return True
+
+        return False
 
     def handle_collisions(self):
         # if player hits snake head, die
