@@ -8,6 +8,7 @@ from snake import Snake
 from leveldata import LevelData
 from snakecharmer import SnakeCharmer
 import sys
+import os
 
 
 class Scene:
@@ -16,6 +17,10 @@ class Scene:
     def __init__(self):
         self.inittime = time.time()
         self.font = utils.load_font("Nunito-SemiBold", 20)
+
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load(os.path.join(utils.current_path, "audio", "bgm.wav"))
+            pygame.mixer.music.play(loops=-1)
 
     def update(self, dt):
         raise NotImplementedError
@@ -172,14 +177,13 @@ class Level(Scene):
         self.snakecharmer.update(dt)
 
     def render(self, window):
-        window.fill(pygame.Color("skyblue"))
-        self.draw_bg()
+        self.draw_bg(window)
         window.fblits(self.data.get_layout_to_render())
         self.snake.render(window)
         window.blit(self.snakecharmer.image, self.snakecharmer.rect)
 
-    def draw_bg(self):
-        pass
+    def draw_bg(self, window):
+        window.fill(pygame.Color("#bce0f5"))
 
     def handle_events(self, events):
         for event in events:
