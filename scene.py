@@ -39,6 +39,12 @@ class SceneManager:
         gamestate.current_scene = scene
         scene.manager = self
 
+    def reload_level(self):
+        if type(gamestate.current_scene) != Level:
+            raise TypeError(f"Must be in a level to reload: Scene type is {type(gamestate.current_scene)}")
+
+        self.load(Level(gamestate.current_scene.name))
+
 
 class StartScreen(Scene):
     def __init__(self):
@@ -178,6 +184,10 @@ class Level(Scene):
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
+                # reload key
+                if event.key == pygame.K_r:
+                    self.manager.reload_level()
+
                 # cheat key
                 if event.key == pygame.K_k:
                     self.to_nextlevel()
