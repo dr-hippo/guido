@@ -71,7 +71,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
         for rect in rects:
             if rect.collidepoint(self.rect.bottomleft) or \
-                    rect.collidepoint(self.rect.bottomright):
+                    rect.collidepoint(Vector2(self.rect.bottomright[0] - 1, self.rect.bottomright[1])):
                 return True
 
         return False
