@@ -1,0 +1,50 @@
+{
+  "name": "Dexterity",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W   WWWWWWWWW    WWW",
+    "W   WWWWWWWWW   GWWW",
+    "W   WWWWWWWWW  WWWWW",
+    "W       WWWW  WWWWWW",
+    "W            WWWWWWW",
+    "W      WWWWW WWWWWWW",
+    "W      WWWWW WWWWWWW",
+    "W      WW    WWWWWWW",
+    "WWWWWWWWW    WWWWWWW",
+    "WWWWWWWWW         WW",
+    "WWWWWWWWW         WW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    0,
+    1
+  ],
+  "snake": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ]
+  ],
+  "playerspawn": [
+    5,
+    7
+  ]
+}

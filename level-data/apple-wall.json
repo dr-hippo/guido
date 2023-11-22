@@ -1,0 +1,42 @@
+{
+  "name": "APPLES",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWW    WWW",
+    "WWWWWWWWWWWWW    WWW",
+    "WWWWWWWWWWWWW    WWW",
+    "W          AA  G WWW",
+    "W          AAWWWWWWW",
+    "W          WWWWWWWWW",
+    "W          WWWWWWWWW",
+    "WW           WWWWWWW",
+    "W            WWWWWWW",
+    "W            WWWWWWW",
+    "W                 WW",
+    "W                 WW",
+    "WWWWWWWW          WW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    1,
+    0
+  ],
+  "snake": [
+    [
+      3,
+      4
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      1,
+      4
+    ]
+  ],
+  "playerspawn": [
+    16,
+    12
+  ]
+}
