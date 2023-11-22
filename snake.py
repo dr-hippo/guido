@@ -25,7 +25,7 @@ class SnakeBlock(Sprite):
         self.position = position
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
-    def choose_correct_sprite(self, prev_block, next_block):
+    def get_image(self, prev_block, next_block):
         """Choose the correct sprite based on previous and next block"""
         rel_prevblock = prev_block - self.position if prev_block else None
         rel_nextblock = next_block - self.position if next_block else None
@@ -111,9 +111,16 @@ class Snake:
     def get_next_move(self):
         return self.blocks.sprites()[0].position + self.direction  # where the snake will move next with no more inputs
 
-    def occupies(self, position, startindex=0, endindex=-1):
+    def occupies(self, position, startindex=0, endindex=None):
         """Checks if there is a snake block in the specified index range over the given position."""
-        return position in [block.position for block in self.blocks.sprites()[startindex:endindex]]
+        sprites = []
+        if endindex:
+            sprites = self.blocks.sprites()[startindex:endindex]
+
+        else:
+            sprites = self.blocks.sprites()[startindex:]
+
+        return position in [sprite.position for sprite in sprites]
 
     def move(self):
         # the head of the snake moves in direction
@@ -154,7 +161,7 @@ class Snake:
 
     def update_block_images(self):
         for j in range(len(self.blocks)):
-            self.blocks.sprites()[j].choose_correct_sprite(
+            self.blocks.sprites()[j].get_image(
                 self.blocks.sprites()[j - 1].position if j != 0 else None,
                 self.blocks.sprites()[j + 1].position if j != len(self.blocks) - 1 else None
             )
@@ -174,10 +181,10 @@ class Snake:
         # by default, next tile image is normal image
         next_tile_image = self.next_tile_image
 
-        # if next move will go into wall, set next tile image to alert
+        # if next move will go into wall or itself, set next tile image to alert
         next_move_tile = self.scene.data.grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
         if next_move_tile and next_move_tile.type == "wall" \
-                or self.occupies(self.get_next_move()):
+                or self.occupies(self.get_next_move(), endindex=-1):
             next_tile_image = self.next_tile_alert_image
 
         window.blit(next_tile_image,
