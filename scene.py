@@ -177,6 +177,11 @@ class Level(Scene):
 
     def handle_events(self, events):
         for event in events:
+            if event.type == pygame.KEYDOWN:
+                # cheat key
+                if event.key == pygame.K_k:
+                    self.to_nextlevel()
+
             self.snake.handle_events(events)
             self.snakecharmer.handle_events(events)
 
