@@ -108,49 +108,52 @@ class Snake:
 
         self.update_block_images()
 
+    def __getitem__(self, item):
+        return self.blocks.sprites()[item]
+
     def get_next_move(self):
-        return self.blocks.sprites()[0].position + self.direction  # where the snake will move next with no more inputs
+        return self[0].position + self.direction  # where the snake will move next with no more inputs
 
     def occupies(self, position, startindex=0, endindex=None):
         """Checks if there is a snake block in the specified index range over the given position."""
         sprites = []
         if endindex:
-            sprites = self.blocks.sprites()[startindex:endindex]
+            sprites = self[startindex:endindex]
 
         else:
-            sprites = self.blocks.sprites()[startindex:]
+            sprites = self[startindex:]
 
         return position in [sprite.position for sprite in sprites]
 
     def move(self):
         # the head of the snake moves in direction
         new_headpos = self.get_next_move()
-        position_to_add_block = self.blocks.sprites()[-1].position
+        position_to_add_block = self[-1].position
 
         # rest of the snake follows
         for i in range(len(self.blocks) - 1, 0, -1):
-            block = self.blocks.sprites()[i]
-            block.update(self.blocks.sprites()[i - 1].position)
+            block = self[i]
+            block.update(self[i - 1].position)
 
         # update snake head
-        self.blocks.sprites()[0].update(new_headpos)
+        self[0].update(new_headpos)
         self.update_block_images()
 
         # check if snake has collided with a wall or itself
-        if pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.scene.data.groups["wall"]):
+        if pygame.sprite.spritecollideany(self[0], self.scene.data.groups["wall"]):
             # if so, trigger death
             self.scene.on_death("Snake ran into a wall ;(")
 
-        elif self.occupies(self.blocks.sprites()[0].position, startindex=1):
+        elif self.occupies(self[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")
 
         # check if snake has collided with an apple, if so increase its length
-        collided_apple = pygame.sprite.spritecollideany(self.blocks.sprites()[0], self.scene.data.groups["apple"])
+        collided_apple = pygame.sprite.spritecollideany(self[0], self.scene.data.groups["apple"])
         if collided_apple:
             self.blocks.add(SnakeBlock(position_to_add_block))
             self.update_block_images()
             self.scene.data.groups["apple"].remove(collided_apple)
-            self.scene.data.empty(self.blocks.sprites()[0].position)
+            self.scene.data.empty(self[0].position)
 
         self.time_since_last_move = 0
 
@@ -161,9 +164,9 @@ class Snake:
 
     def update_block_images(self):
         for j in range(len(self.blocks)):
-            self.blocks.sprites()[j].get_image(
-                self.blocks.sprites()[j - 1].position if j != 0 else None,
-                self.blocks.sprites()[j + 1].position if j != len(self.blocks) - 1 else None
+            self[j].get_image(
+                self[j - 1].position if j != 0 else None,
+                self[j + 1].position if j != len(self.blocks) - 1 else None
             )
 
     def handle_events(self, events):
@@ -171,8 +174,8 @@ class Snake:
             # if event is a keypress on a direction key
             if event.type == pygame.KEYDOWN and event.key in self.direction_dict:
                 # make sure moving in direction won't fold snake into itself
-                if self.blocks.sprites()[0].position + self.direction_dict[event.key] \
-                        != self.blocks.sprites()[1].position:
+                if self[0].position + self.direction_dict[event.key] \
+                        != self[1].position:
                     self.direction = self.direction_dict[event.key]
 
     def render(self, window):

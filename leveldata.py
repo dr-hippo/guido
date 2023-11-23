@@ -3,7 +3,7 @@ import os
 import config as cfg
 import utilities as utils
 from tile import Tile
-from pygame.sprite import Group
+from pygame.sprite import Group, spritecollide
 from pygame import Vector2
 from snake import SnakeBlock
 
@@ -56,6 +56,20 @@ class LevelData:
 
     def empty(self, position):
         self.grid[int(position.y)][int(position.x)] = None
+
+    def get_rects(self, *groups):
+        rects = []
+        for group in groups:
+            rects += [sprite.rect for sprite in self.groups[group].sprites()]
+
+        return rects
+
+    def get_sprite_collisions(self, sprite, *groups):
+        collision_list = []
+        for group in groups:
+            collision_list += spritecollide(sprite, self.groups[group], False)
+
+        return collision_list
 
     def get_layout_to_render(self):
         """Return layout formatted for use in pygame.Surface.fblits call."""

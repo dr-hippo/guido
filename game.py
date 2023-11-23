@@ -13,7 +13,7 @@ import scene
 
 # game initialisation
 pygame.init()
-window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.RESIZABLE)
+window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption('Guido the Snake Charmer')
 pygame.display.set_icon(utils.load_image("topbar-icon"))
 clock = pygame.time.Clock()

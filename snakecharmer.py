@@ -1,7 +1,7 @@
 import config as cfg
 import utilities as utils
 import pygame
-from pygame.sprite import Sprite, Group
+from pygame.sprite import Sprite
 from pygame import Rect, Vector2
 from physicsbody import PhysicsBody
 
@@ -18,7 +18,6 @@ class SnakeCharmer(Sprite, PhysicsBody):
         self.rect = self.image.get_rect(midbottom=position)
         self.movingleft = False
         self.movingright = False
-        self.intersecting_rects = []
 
     def handle_events(self, events):
         for event in events:
@@ -58,16 +57,14 @@ class SnakeCharmer(Sprite, PhysicsBody):
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
 
     def get_collisions(self):
-        collided_tiles = pygame.sprite.spritecollide(self, self.scene.data.groups["wall"], False)
-        collided_apples = pygame.sprite.spritecollide(self, self.scene.data.groups["apple"], False)
-        collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake.blocks.sprites()[1:], False)
-        return [self.rect.clip(c.rect) for c in collided_tiles + collided_apples + collided_snakeblocks]
+        collided_tiles = self.scene.data.get_sprite_collisions(self, "wall", "apple")
+        collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake[1:], False)
+        return [self.rect.clip(c.rect) for c in collided_tiles + collided_snakeblocks]
 
     def groundcheck(self):
         # check if one pixel beneath left or right bottom corners is ground (wall, snake, or apple)
-        rects = [sprite.rect for sprite in self.scene.snake.blocks.sprites()[1:]] + \
-                [sprite.rect for sprite in self.scene.data.groups["wall"].sprites()] + \
-                [sprite.rect for sprite in self.scene.data.groups["apple"].sprites()]
+        rects = [sprite.rect for sprite in self.scene.snake[1:]] + \
+                self.scene.data.get_rects("apple", "wall")
 
         for rect in rects:
             if rect.collidepoint(self.rect.bottomleft) or \
@@ -78,17 +75,15 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
     def handle_collisions(self):
         # if player hits snake head, die
-        if pygame.sprite.collide_mask(self, self.scene.snake.blocks.sprites()[0]):
+        if pygame.sprite.collide_mask(self, self.scene.snake[0]):
             self.scene.on_death("Snake ate Guido ;(")
 
         # if player reaches a goal flag, go to next level
         if pygame.sprite.spritecollideany(self, self.scene.data.groups["goal"], pygame.sprite.collide_mask):
             self.scene.to_nextlevel()
 
-        self.intersecting_rects = self.get_collisions()
-
         iteration_count = 0
-        for rect in self.intersecting_rects:
+        for rect in self.get_collisions():
             # if this has already been resolved, no need to resolve
             if self.rect.clip(rect).size == (0, 0):
                 continue
@@ -120,8 +115,6 @@ class SnakeCharmer(Sprite, PhysicsBody):
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
                         continue
-
-            self.intersecting_rects = self.get_collisions()
 
             iteration_count += 1
             if iteration_count > 100:
