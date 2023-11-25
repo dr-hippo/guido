@@ -8,9 +8,11 @@ Platformer-Snake hybrid (appropriately programmed in Pygame).
 ## Features:
 
 - XX levels
+- Hungry snake
+- Snakecharmer
+- Apples
 - Switches
 - Mind-boggling puzzles
-- Use the snake to eat your enemies!
 
 ## Controls:
 
@@ -20,6 +22,6 @@ Platformer-Snake hybrid (appropriately programmed in Pygame).
     - D: Move right
     - W/Space: Jump
 
-Coded in Python 3.9 with Pygame Community Edition 2.3.2
+Coded in Python 3.9.6 with Pygame Community Edition 2.3.2.
 
 To run from source *pygame-ce* **(not pygame)** must be installed.

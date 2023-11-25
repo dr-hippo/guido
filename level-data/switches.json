@@ -1,0 +1,42 @@
+{
+  "name": "Switches test",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W    Z     X     WWW",
+    "W   WWWWWWWWW    WWW",
+    "W   WWWWWWWWW    WWW",
+    "W        WW    G WWW",
+    "W         X  WWWWWWW",
+    "W      WWWWWWWWWWWWW",
+    "W               WWWW",
+    "W               WWWW",
+    "W               WWWW",
+    "WW        WW  x WWWW",
+    "WWW      WWWWWWWWWWW",
+    "WWWWz   WWWWWWWWWWWW",
+    "WWWWW  WWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    -1,
+    0
+  ],
+  "snake": [
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      1
+    ]
+  ],
+  "playerspawn": [
+    1,
+    7
+  ],
+  "switchdict": {
+    "z": "Z",
+    "x": "X"
+  }
+}

@@ -2,14 +2,16 @@ import json
 import os
 import config as cfg
 import utilities as utils
-from tile import Tile
+from tile import Tile, Switch
 from pygame.sprite import Group, spritecollide
 from pygame import Vector2
 from snake import SnakeBlock
 
 
 class LevelData:
-    def __init__(self, filename):
+    def __init__(self, scene, filename):
+        self.scene = scene
+
         # open json file with specified name and process it
         datapath = os.path.join(utils.current_path, "level-data", filename + os.extsep + "json")
         rawdata = open(datapath)
@@ -42,17 +44,20 @@ class LevelData:
         for y in range(len(self._data["layout"])):
             self.grid.append([])
             for x in range(len(self._data["layout"][y])):
-                # if the key exists and means something
-                if self._data["layout"][y][x] in self.glyphkey.keys():
-                    glyph_meaning = self.glyphkey[self._data["layout"][y][x]]
-                    if glyph_meaning:
-                        # add tile to grid and correct sprite group
-                        tile = Tile(glyph_meaning, Vector2(x, y))
-                        self.grid[y].append(tile)
-                        self.groups[glyph_meaning].add(tile)
+                glyph = self._data["layout"][y][x]
+                glyph_meaning = self.glyphkey[glyph] if glyph in self.glyphkey else None
+                if glyph_meaning:
+                    # add tile to grid and correct sprite group
+                    tile = Tile(self.scene, glyph_meaning, Vector2(x, y))
+                    self.grid[y].append(tile)
+                    self.groups[glyph_meaning].add(tile)
 
-                    else:
-                        self.grid[y].append(None)
+                elif "switchdict" in self._data and glyph in self._data["switchdict"]:
+                    print(f"switch with glyph {glyph}")
+                    self.grid[y].append(Switch(self, glyph))
+
+                else:
+                    self.grid[y].append(None)
 
     def empty(self, position):
         self.grid[int(position.y)][int(position.x)] = None

@@ -166,7 +166,7 @@ class Level(Scene):
     def __init__(self, name):
         super().__init__()
         self.name = name
-        self.data = LevelData(name)
+        self.data = LevelData(self, name)
         self.snake = Snake(self)
         playerspawn_world_space = Vector2((self.data.playerspawn.x + 0.5) * cfg.GRIDSIZE,  # center of cell vertically
                                           (self.data.playerspawn.y + 1) * cfg.GRIDSIZE)  # bottom of cell horizontally

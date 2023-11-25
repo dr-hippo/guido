@@ -41,13 +41,14 @@ class SnakeCharmer(Sprite, PhysicsBody):
     def update(self, dt):
         Sprite.update(self)
         PhysicsBody.update(self, dt)
+
+        # TODO: make this use PhysicsBody.addforce() once that works
         if self.movingleft:
             self.position.x -= cfg.SNAKECHARMER_MOVE_SPEED * cfg.GRIDSIZE * dt
 
         if self.movingright:
             self.position.x += cfg.SNAKECHARMER_MOVE_SPEED * cfg.GRIDSIZE * dt
 
-        self.position.y = pygame.math.clamp(self.position.y, 0, pygame.display.get_surface().get_rect().h)
         self.rect.midbottom = self.position
         self.handle_collisions()
 
@@ -82,7 +83,6 @@ class SnakeCharmer(Sprite, PhysicsBody):
         if pygame.sprite.spritecollideany(self, self.scene.data.groups["goal"], pygame.sprite.collide_mask):
             self.scene.to_nextlevel()
 
-        iteration_count = 0
         for rect in self.get_collisions():
             # if this has already been resolved, no need to resolve
             if self.rect.clip(rect).size == (0, 0):
@@ -90,14 +90,14 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
             if rect.w > rect.h:
                 if self.rect.top == rect.top:
-                    self.velocity = Vector2(0, 0)
+                    self.velocity.y = 0
                     self.position.y += rect.h
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
                         continue
 
                 if self.rect.bottom == rect.bottom:
-                    self.velocity = Vector2(0, 0)
+                    self.velocity.y = 0
                     self.position.y -= rect.h
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
@@ -105,17 +105,15 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
             else:
                 if self.rect.left == rect.left:
+                    self.velocity.x = 0
                     self.position.x += rect.w
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
                         continue
 
                 if self.rect.right == rect.right:
+                    self.velocity.x = 0
                     self.position.x -= rect.w
                     self.rect.midbottom = self.position
                     if self.rect.clip(rect).size == (0, 0):
                         continue
-
-            iteration_count += 1
-            if iteration_count > 100:
-                raise SystemExit("Infinite loop while resolving collision")
