@@ -2,10 +2,12 @@ import json
 import os
 import config as cfg
 import utilities as utils
-from tile import Tile, Switch
+import importlib
 from pygame.sprite import Group, spritecollide
 from pygame import Vector2
 from snake import SnakeBlock
+
+tile = importlib.import_module("tile")
 
 
 class LevelData:
@@ -16,45 +18,48 @@ class LevelData:
         datapath = os.path.join(utils.current_path, "level-data", filename + os.extsep + "json")
         rawdata = open(datapath)
         self._data = json.load(rawdata)
+
         self.glyphkey = {
-            "W": "wall",
-            "A": "apple",
-            "G": "goal",
+            "W": "Wall",
+            "A": "Apple",
+            "G": "Goal",
             " ": None
         }
 
         self.snakedir = self._data["snakedir"]
 
-        self.snakedata = []
-
         # load snake data into list of SnakeBlocks
+        self.snakedata = []
         for pos in self._data["snake"]:
             self.snakedata.append(SnakeBlock(Vector2(pos)))
 
         self.playerspawn = Vector2(self._data["playerspawn"])
 
+        # create sprite groups based on values of glyphkeys
         self.groups = {}
         for v in self.glyphkey.values():
             if v:
                 self.groups[v] = Group()
 
+        # initialise grid and groups
+        # TODO: make this readable
         self.grid = []
+        self.switchdict = self._data["switchdict"] if "switchdict" in self._data else {}
 
-        # initialise data
         for y in range(len(self._data["layout"])):
             self.grid.append([])
             for x in range(len(self._data["layout"][y])):
                 glyph = self._data["layout"][y][x]
-                glyph_meaning = self.glyphkey[glyph] if glyph in self.glyphkey else None
-                if glyph_meaning:
+                glyph_class_name = self.glyphkey[glyph] if glyph in self.glyphkey else None
+                if glyph_class_name:
                     # add tile to grid and correct sprite group
-                    tile = Tile(self.scene, glyph_meaning, Vector2(x, y))
-                    self.grid[y].append(tile)
-                    self.groups[glyph_meaning].add(tile)
+                    newtile = getattr(tile, glyph_class_name)(self.scene, Vector2(x, y))
+                    self.grid[y].append(newtile)
+                    self.groups[glyph_class_name].add(newtile)
 
-                elif "switchdict" in self._data and glyph in self._data["switchdict"]:
-                    print(f"switch with glyph {glyph}")
-                    self.grid[y].append(Switch(self, glyph))
+                elif glyph in self.switchdict:
+                    # TODO: create switches, doors, and link them up
+                    pass
 
                 else:
                     self.grid[y].append(None)
@@ -79,10 +84,9 @@ class LevelData:
     def get_layout_to_render(self):
         """Return layout formatted for use in pygame.Surface.fblits call."""
         fblits_data = []
-        for y in range(len(self.grid)):
-            for x in range(len(self.grid[y])):
-                tile = self.grid[y][x]
-                if tile:
-                    fblits_data.append((tile.image, tile.rect))
+        for row in self.grid:
+            for square in row:
+                if square:
+                    fblits_data.append((square.image, square.rect))
 
         return tuple(fblits_data)

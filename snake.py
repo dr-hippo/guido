@@ -17,13 +17,13 @@ class SnakeBlock(Sprite):
         self.position = position
         self.image = utils.load_image("snake", "snake")
         self.mask = pygame.mask.Mask((cfg.GRIDSIZE, cfg.GRIDSIZE))
-        self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
+        self.rect = self.image.get_rect(topleft=position * cfg.GRIDSIZE)
 
     def update(self, position):
         """Update sprite based on position of adjacent blocks.
         Previous block is the one closer to the head, next block is the one closer to the tail."""
         self.position = position
-        self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
+        self.rect = self.image.get_rect(topleft=position * cfg.GRIDSIZE)
 
     def get_image(self, prev_block, next_block):
         """Choose the correct sprite based on previous and next block"""
@@ -140,7 +140,7 @@ class Snake:
         self.update_block_images()
 
         # check if snake has collided with a wall or itself
-        if pygame.sprite.spritecollideany(self[0], self.scene.data.groups["wall"]):
+        if pygame.sprite.spritecollideany(self[0], self.scene.data.groups["Wall"]):
             # if so, trigger death
             self.scene.on_death("Snake ran into a wall ;(")
 
@@ -148,11 +148,11 @@ class Snake:
             self.scene.on_death("Snake ran into itself ;&")
 
         # check if snake has collided with an apple, if so increase its length
-        collided_apple = pygame.sprite.spritecollideany(self[0], self.scene.data.groups["apple"])
+        collided_apple = pygame.sprite.spritecollideany(self[0], self.scene.data.groups["Apple"])
         if collided_apple:
             self.blocks.add(SnakeBlock(position_to_add_block))
             self.update_block_images()
-            self.scene.data.groups["apple"].remove(collided_apple)
+            self.scene.data.groups["Apple"].remove(collided_apple)
             self.scene.data.empty(self[0].position)
 
         self.time_since_last_move = 0
@@ -186,9 +186,10 @@ class Snake:
 
         # if next move will go into wall or itself, set next tile image to alert
         next_move_tile = self.scene.data.grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
-        if next_move_tile and next_move_tile.type == "wall" \
+        if next_move_tile and next_move_tile.get_name() == "Wall" \
                 or self.occupies(self.get_next_move(), endindex=-1):
             next_tile_image = self.next_tile_alert_image
 
+        # blit next tile image at the correct location
         window.blit(next_tile_image,
-                    Vector2(self.get_next_move().x * cfg.GRIDSIZE, self.get_next_move().y * cfg.GRIDSIZE))
+                    Vector2(self.get_next_move() * cfg.GRIDSIZE))

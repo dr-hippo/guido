@@ -1,9 +1,10 @@
 import pygame
 
 # some code won't work if old pygame is used instead of pygame-ce
-if not getattr(pygame, "IS_CE", False):
+if not hasattr(pygame, "IS_CE"):
     raise ImportError(
-        """Pygame Community Edition (pygame-ce) is required for this game to run correctly from source.""")
+        """Pygame Community Edition (pygame-ce) is required for this game to run correctly from source."""
+    )
 
 import sys
 import config as cfg

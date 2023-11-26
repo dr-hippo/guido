@@ -58,14 +58,14 @@ class SnakeCharmer(Sprite, PhysicsBody):
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
 
     def get_collisions(self):
-        collided_tiles = self.scene.data.get_sprite_collisions(self, "wall", "apple")
+        collided_tiles = self.scene.data.get_sprite_collisions(self, "Wall", "Apple")
         collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake[1:], False)
         return [self.rect.clip(c.rect) for c in collided_tiles + collided_snakeblocks]
 
     def groundcheck(self):
         # check if one pixel beneath left or right bottom corners is ground (wall, snake, or apple)
         rects = [sprite.rect for sprite in self.scene.snake[1:]] + \
-                self.scene.data.get_rects("apple", "wall")
+                self.scene.data.get_rects("Apple", "Wall")
 
         for rect in rects:
             if rect.collidepoint(self.rect.bottomleft) or \
@@ -80,7 +80,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
             self.scene.on_death("Snake ate Guido ;(")
 
         # if player reaches a goal flag, go to next level
-        if pygame.sprite.spritecollideany(self, self.scene.data.groups["goal"], pygame.sprite.collide_mask):
+        if pygame.sprite.spritecollideany(self, self.scene.data.groups["Goal"], pygame.sprite.collide_mask):
             self.scene.to_nextlevel()
 
         for rect in self.get_collisions():
