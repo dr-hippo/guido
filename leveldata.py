@@ -3,7 +3,7 @@ import os
 import config as cfg
 import utilities as utils
 import importlib
-from pygame.sprite import Group, spritecollide
+from pygame.sprite import Group, spritecollide, groupcollide
 from pygame import Vector2
 from snake import SnakeBlock
 
@@ -88,6 +88,12 @@ class LevelData:
         self.grid[y].append(newtile)
         self.groups[class_name].add(newtile)
 
+    def get_at(self, position):
+        return self.grid[int(position.y)][int(position.x)]
+
+    def set_at(self, position, value):
+        self.grid[int(position.y)][int(position.x)] = value
+
     def empty(self, position):
         self.grid[int(position.y)][int(position.x)] = None
 
@@ -102,6 +108,13 @@ class LevelData:
         collision_list = []
         for group in groups:
             collision_list += spritecollide(sprite, self.groups[group], False)
+
+        return collision_list
+
+    def get_group_collisions(self, spritegroup, *groups):
+        collision_list = []
+        for group in groups:
+            collision_list += groupcollide(spritegroup, self.groups[group], False, False)
 
         return collision_list
 

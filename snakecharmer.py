@@ -58,7 +58,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
 
     def get_collisions(self):
-        collided_tiles = self.scene.data.get_sprite_collisions(self, "Wall", "Apple")
+        collided_tiles = self.scene.data.get_sprite_collisions(self, "Wall", "Apple", "Door")
         collided_snakeblocks = pygame.sprite.spritecollide(self, self.scene.snake[1:], False)
         return [self.rect.clip(c.rect) for c in collided_tiles + collided_snakeblocks]
 

@@ -47,7 +47,6 @@ class Door(Tile):
     def __init__(self, scene, position, index):
         self.index = index
         super().__init__(scene, position)
-        self.active = True
 
     def _get_image(self):
         return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
@@ -57,10 +56,29 @@ class Switch(Tile):
     def __init__(self, scene, position, index, connected_door_coords):
         self.index = index
         super().__init__(scene, position)
+        self.scene = scene
         self.active = False
+        self.connected_door_coords = connected_door_coords
         self.connected_doors = []
-        for door in connected_door_coords:
-            self.connected_doors.append(self.scene.data.grid[connected_door_coords.y][connected_door_coords.x])
 
     def _get_image(self):
         return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
+
+    def update(self, dt):
+        # can't do this in __init__ due to self.scene.data not fully initialised (prob. a race condition)
+        if not self.connected_doors:
+            for coord in self.connected_door_coords:
+                self.connected_doors.append(self.scene.data.grid[coord[1]][coord[0]])
+
+        # actual update code
+        self.active = self.scene.snake.occupies(self.position) or \
+                      pygame.sprite.collide_rect(self, self.scene.snakecharmer)
+
+        for door in self.connected_doors:
+            if self.active:
+                door.kill()
+                self.scene.data.empty(door.position)
+
+            else:
+                self.scene.data.groups["Door"].add(door)
+                self.scene.data.set_at(door.position, door)

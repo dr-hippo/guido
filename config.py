@@ -2,7 +2,7 @@
 RESOLUTION = (320, 240)
 TARGET_FPS = 60  # Physics should be framerate-independent, but best to leave as-is
 SHOW_FPS = True
-LEVELS = ["apples", "switches", "apple-wall", "dexterity"]
+LEVELS = ["apples", "apple-wall", "dexterity", "switches"]
 
 # Gameplay
 GRIDSIZE = 16

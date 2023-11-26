@@ -2,18 +2,18 @@
   "name": "Short snake",
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
-    "W                WWW",
+    "W      WWW       WWW",
     "W   WWWWWWWWW    WWW",
     "W   WWWWWWWWW    WWW",
     "W        WW    G WWW",
     "W            WWWWWWW",
     "W      WWWWWWWWWWWWW",
-    "W               WWWW",
-    "W               WWWW",
+    "W      Z        WWWW",
+    "W      Z        WWWW",
     "WAWWWWWW        WWWW",
-    "W WWWWWWWWWW    WWWW",
+    "W WWWWWWWWWW  x WWWW",
     "W WWWWWW   WWWWWWWWW",
-    "W      A A WWWWWWWWW",
+    "Wz    XA A WWWWWWWWW",
     "WWWWWWWW   WWWWWWWWW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
@@ -34,5 +34,9 @@
   "playerspawn": [
     1,
     7
-  ]
+  ],
+  "switchdict": {
+    "z": "Z",
+    "x": "X"
+  }
 }

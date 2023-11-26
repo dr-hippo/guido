@@ -141,11 +141,12 @@ class Snake:
         self[0].update(new_headpos)
         self.update_block_images()
 
-        # check if snake has collided with a wall or itself
-        if pygame.sprite.spritecollideany(self[0], self.scene.data.groups["Wall"]):
+        # check if snake has collided with a wall or a door
+        if self.scene.data.get_group_collisions(self.blocks, "Wall", "Door"):
             # if so, trigger death
             self.scene.on_death("Snake ran into a wall ;(")
 
+        # check if snake has collided with itself
         elif self.occupies(self[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")
 
@@ -183,8 +184,10 @@ class Snake:
         next_tile_image = self.next_tile_image
 
         # if next move will go into wall or itself, set next tile image to alert
-        next_move_tile = self.scene.data.grid[int(self.get_next_move().y)][int(self.get_next_move().x)]
-        if next_move_tile and next_move_tile.get_name() == "Wall" \
+        next_move_tile = self.scene.data.get_at(self.get_next_move())
+        if next_move_tile and ( \
+                        next_move_tile.get_name() == "Wall" or \
+                        next_move_tile.get_name() == "Door") \
                 or self.occupies(self.get_next_move(), endindex=-1):
             next_tile_image = self.next_tile_alert_image
 
