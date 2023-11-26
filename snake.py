@@ -106,6 +106,8 @@ class Snake:
         self.next_tile_image = utils.load_image("snake-next-tile")
         self.next_tile_alert_image = utils.load_image("snake-next-tile-alert")
 
+        self.position_to_add_block = self[-1].position
+
         self.update_block_images()
 
     def __getitem__(self, item):
@@ -128,7 +130,7 @@ class Snake:
     def move(self):
         # the head of the snake moves in direction
         new_headpos = self.get_next_move()
-        position_to_add_block = self[-1].position
+        self.position_to_add_block = self[-1].position
 
         # rest of the snake follows
         for i in range(len(self.blocks) - 1, 0, -1):
@@ -147,15 +149,11 @@ class Snake:
         elif self.occupies(self[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")
 
-        # check if snake has collided with an apple, if so increase its length
-        collided_apple = pygame.sprite.spritecollideany(self[0], self.scene.data.groups["Apple"])
-        if collided_apple:
-            self.blocks.add(SnakeBlock(position_to_add_block))
-            self.update_block_images()
-            self.scene.data.groups["Apple"].remove(collided_apple)
-            self.scene.data.empty(self[0].position)
-
         self.time_since_last_move = 0
+
+    def add_block(self):
+        self.blocks.add(SnakeBlock(self.position_to_add_block))
+        self.update_block_images()
 
     def update(self, dt):
         self.time_since_last_move += dt

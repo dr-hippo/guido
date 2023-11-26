@@ -79,10 +79,6 @@ class SnakeCharmer(Sprite, PhysicsBody):
         if pygame.sprite.collide_mask(self, self.scene.snake[0]):
             self.scene.on_death("Snake ate Guido ;(")
 
-        # if player reaches a goal flag, go to next level
-        if pygame.sprite.spritecollideany(self, self.scene.data.groups["Goal"], pygame.sprite.collide_mask):
-            self.scene.to_nextlevel()
-
         for rect in self.get_collisions():
             # if this has already been resolved, no need to resolve
             if self.rect.clip(rect).size == (0, 0):
