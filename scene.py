@@ -175,6 +175,8 @@ class Level(Scene):
     def update(self, dt):
         self.snake.update(dt)
         self.snakecharmer.update(dt)
+        for group in self.data.groups.values():
+            group.update(self.snake, self.snakecharmer, dt)
 
     def render(self, window):
         self.draw_bg(window)

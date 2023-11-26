@@ -10,6 +10,16 @@ from snake import SnakeBlock
 tile = importlib.import_module("tile")
 
 
+def get_all_indices(symbol, string_list):
+    indices = []
+    for y in range(len(string_list)):
+        for x in range(len(string_list[y])):
+            if string_list[y][x] == symbol:
+                indices.append((x, y))
+
+    return indices
+
+
 class LevelData:
     def __init__(self, scene, filename):
         self.scene = scene
@@ -36,7 +46,11 @@ class LevelData:
         self.playerspawn = Vector2(self._data["playerspawn"])
 
         # create sprite groups based on values of glyphkeys
-        self.groups = {}
+        # doors and switches are special case, create them first
+        self.groups = {
+            "Door": Group(),
+            "Switch": Group(),
+        }
         for v in self.glyphkey.values():
             if v:
                 self.groups[v] = Group()
@@ -53,16 +67,26 @@ class LevelData:
                 glyph_class_name = self.glyphkey[glyph] if glyph in self.glyphkey else None
                 if glyph_class_name:
                     # add tile to grid and correct sprite group
-                    newtile = getattr(tile, glyph_class_name)(self.scene, Vector2(x, y))
-                    self.grid[y].append(newtile)
-                    self.groups[glyph_class_name].add(newtile)
+                    self.instantiate_tile(glyph_class_name, x, y)
 
+                # glyph is a switch
                 elif glyph in self.switchdict:
-                    # TODO: create switches, doors, and link them up
-                    pass
+                    index = list(self.switchdict.keys()).index(glyph)
+                    self.instantiate_tile("Switch", x, y, index,
+                                          get_all_indices(self.switchdict[glyph], self._data["layout"]))
+
+                # glyph is a door
+                elif glyph in self.switchdict.values():
+                    index = list(self.switchdict.values()).index(glyph)
+                    self.instantiate_tile("Door", x, y, index)
 
                 else:
                     self.grid[y].append(None)
+
+    def instantiate_tile(self, class_name, x, y, *additional_args):
+        newtile = getattr(tile, class_name)(self.scene, Vector2(x, y), *additional_args)
+        self.grid[y].append(newtile)
+        self.groups[class_name].add(newtile)
 
     def empty(self, position):
         self.grid[int(position.y)][int(position.x)] = None

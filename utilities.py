@@ -7,7 +7,7 @@ if not pygame.get_init():
     pygame.init()
 
 current_path = ""
-if getattr(sys, 'frozen', False): # PyInstaller adds this attribute
+if getattr(sys, 'frozen', False):  # PyInstaller adds this attribute
     # running in a bundle
     current_path = sys._MEIPASS
 else:

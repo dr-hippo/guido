@@ -11,11 +11,17 @@ class Tile(Sprite):
         super().__init__()
         self.scene = scene
         self.position = position
-        self.image = utils.load_image(self.get_name(), "tiles")
+        self.image = self._get_image()
         self.rect = self.image.get_rect(topleft=(position.x * cfg.GRIDSIZE, position.y * cfg.GRIDSIZE))
 
     def get_name(self):
         return self.__class__.__name__
+
+    def _get_image(self):
+        return utils.load_image(self.get_name().lower(), "tiles")
+
+    def update(self, snake, snakecharmer, dt):
+        pass
 
 
 class Wall(Tile):
@@ -31,15 +37,20 @@ class Goal(Tile):
 
 
 class Door(Tile):
-    pass
+    def __init__(self, scene, position, index):
+        self.index = index
+        super().__init__(scene, position)
+
+    def _get_image(self):
+        return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
 
 
 class Switch(Tile):
-    def __init__(self, scene, position, connected_doors, index):
-        super().__init__(self, scene, position)
+    def __init__(self, scene, position, index, connected_doors):
+        self.index = index
+        super().__init__(scene, position)
         self.active = False
         self.connected_doors = connected_doors
-        self.index = index
 
-    def update(self, dt):
-        pass
+    def _get_image(self):
+        return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")

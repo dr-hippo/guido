@@ -2,18 +2,18 @@
   "name": "Switches test",
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
-    "W    Z     X     WWW",
+    "W    ZZ          WWW",
     "W   WWWWWWWWW    WWW",
     "W   WWWWWWWWW    WWW",
     "W        WW    G WWW",
     "W         X  WWWWWWW",
     "W      WWWWWWWWWWWWW",
-    "W               WWWW",
-    "W               WWWW",
-    "W               WWWW",
+    "W          C    WWWW",
+    "W          C    WWWW",
+    "W          C    WWWW",
     "WW        WW  x WWWW",
     "WWW      WWWWWWWWWWW",
-    "WWWWz   WWWWWWWWWWWW",
+    "WWWWz  cWWWWWWWWWWWW",
     "WWWWW  WWWWWWWWWWWWW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
@@ -37,6 +37,7 @@
   ],
   "switchdict": {
     "z": "Z",
-    "x": "X"
+    "x": "X",
+    "c": "C"
   }
 }
