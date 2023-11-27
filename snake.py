@@ -108,6 +108,8 @@ class Snake:
 
         self.position_to_add_block = self[-1].position
 
+        self.move_sound = utils.load_audio("slither", "snake")
+
         self.update_block_images()
 
     def __getitem__(self, item):
@@ -150,6 +152,8 @@ class Snake:
         elif self.occupies(self[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")
 
+        self.move_sound.play()
+
         self.time_since_last_move = 0
 
     def add_block(self):
@@ -173,8 +177,8 @@ class Snake:
             # if event is a keypress on a direction key
             if event.type == pygame.KEYDOWN and event.key in self.direction_dict:
                 # make sure moving in direction won't fold snake into itself
-                if self[0].position + self.direction_dict[event.key] \
-                        != self[1].position:
+                if self[0].position + self.direction_dict[event.key] != self[1].position and \
+                        self.direction_dict[event.key] != self.direction:
                     self.direction = self.direction_dict[event.key]
 
     def render(self, window):
@@ -183,12 +187,10 @@ class Snake:
         # by default, next tile image is normal image
         next_tile_image = self.next_tile_image
 
-        # if next move will go into wall or itself, set next tile image to alert
-        next_move_tile = self.scene.data.get_at(self.get_next_move())
-        if next_move_tile and ( \
-                        next_move_tile.get_name() == "Wall" or \
-                        next_move_tile.get_name() == "Door") and next_move_tile.groups() \
-                or self.occupies(self.get_next_move(), endindex=-1):
+        # if next move will go into wall, door or snake itself, set next tile image to alert
+        next_tile = self.scene.data.get_at(self.get_next_move())
+        if next_tile and ((next_tile.get_name() == "Wall" or next_tile.get_name() == "Door")
+                          and next_tile.groups()) or self.occupies(self.get_next_move(), endindex=-1):
             next_tile_image = self.next_tile_alert_image
 
         # blit next tile image at the correct location

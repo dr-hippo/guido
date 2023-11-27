@@ -19,6 +19,8 @@ class SnakeCharmer(Sprite, PhysicsBody):
         self.movingleft = False
         self.movingright = False
 
+        self.jump_sound = utils.load_audio("jump", "snakecharmer")
+
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -56,6 +58,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         # TODO: this is a temporary fix, need to make addforce consistent
         self.velocity.y = -cfg.SNAKECHARMER_JUMP_FORCE
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
+        self.jump_sound.play()
 
     def get_collisions(self):
         collided_tiles = self.scene.data.get_sprite_collisions(self, "Wall", "Apple", "Door")

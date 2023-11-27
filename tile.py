@@ -37,9 +37,14 @@ class Apple(Tile):
 
 
 class Goal(Tile):
+    def __init__(self, scene, position):
+        super().__init__(scene, position)
+        self.level_pass_sound = utils.load_audio("level-pass", "environment")
+
     def update(self, dt):
         # if player gets here, go to next level
         if pygame.sprite.collide_mask(self, self.scene.snakecharmer):
+            self.level_pass_sound.play()
             self.scene.to_nextlevel()
 
 
@@ -91,6 +96,9 @@ class Switch(Tile):
         self.connected_door_coords = connected_door_coords
         self.connected_doors = []
 
+        self.activate_sound = utils.load_audio("switch-on", "environment")
+        self.deactivate_sound = utils.load_audio("switch-off", "environment")
+
     def _get_image(self):
         if self.active:
             return utils.load_image(self.get_name().lower() + str(self.index + 1) + "-active", "tiles")
@@ -98,6 +106,8 @@ class Switch(Tile):
         return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
 
     def update(self, dt):
+        active_buffer = self.active
+
         # can't do this in __init__ due to self.scene.data not fully initialised (prob. a race condition)
         if not self.connected_doors:
             for coord in self.connected_door_coords:
@@ -107,6 +117,13 @@ class Switch(Tile):
         self.active = self.scene.snake.occupies(self.position) or \
                       pygame.sprite.collide_rect(self, self.scene.snakecharmer)
         self.image = self._get_image()
+
+        if self.active != active_buffer:
+            if self.active:
+                self.activate_sound.play()
+
+            else:
+                self.deactivate_sound.play()
 
         for door in self.connected_doors:
             door.set_active(not self.active)
