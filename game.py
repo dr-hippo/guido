@@ -2,11 +2,10 @@ import pygame
 
 # some code won't work if old pygame is used instead of pygame-ce
 if not hasattr(pygame, "IS_CE"):
-    raise ImportError(
-        """Pygame Community Edition (pygame-ce) is required for this game to run correctly from source."""
-    )
+    raise ImportError("Pygame Community Edition (pygame-ce) is required to run this game.")
 
 import sys
+import os
 import config as cfg
 import gamestate
 import utilities as utils
@@ -14,9 +13,10 @@ import scene
 
 # game initialisation
 pygame.init()
-window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption('Guido the Snake Charmer')
-pygame.display.set_icon(utils.load_image("topbar-icon"))
+icon = pygame.image.load(os.path.join(utils.current_path, "images", "topbar-icon.png"))
+pygame.display.set_icon(icon)
+window = pygame.display.set_mode(cfg.RESOLUTION, pygame.SCALED | pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 manager = scene.SceneManager()
 
