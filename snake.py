@@ -142,7 +142,7 @@ class Snake:
         self.update_block_images()
 
         # check if snake has collided with a wall or a door
-        if self.scene.data.get_group_collisions(self.blocks, "Wall", "Door"):
+        if self.scene.data.get_group_collisions(self.blocks, "Wall"):
             # if so, trigger death
             self.scene.on_death("Snake ran into a wall ;(")
 
@@ -187,7 +187,7 @@ class Snake:
         next_move_tile = self.scene.data.get_at(self.get_next_move())
         if next_move_tile and ( \
                         next_move_tile.get_name() == "Wall" or \
-                        next_move_tile.get_name() == "Door") \
+                        next_move_tile.get_name() == "Door") and next_move_tile.groups() \
                 or self.occupies(self.get_next_move(), endindex=-1):
             next_tile_image = self.next_tile_alert_image
 

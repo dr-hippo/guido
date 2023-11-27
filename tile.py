@@ -46,22 +46,55 @@ class Goal(Tile):
 class Door(Tile):
     def __init__(self, scene, position, index):
         self.index = index
+        self._active = True
         super().__init__(scene, position)
 
     def _get_image(self):
-        return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
+        if self.get_active():
+            return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
 
+        return utils.load_image(self.get_name().lower() + str(self.index + 1) + "-inactive", "tiles")
+
+    def get_active(self):
+        return self._active
+
+    def set_active(self, value):
+        if type(value) != bool:
+            raise TypeError("Value must be True or False.")
+
+        self._active = value
+        self.image = self._get_image()
+
+        # door has been activated
+        if value:
+            self.scene.data.groups["Door"].add(self)
+
+            collision = self.rect.clip(self.scene.snakecharmer.rect)
+
+            # only kill player if it's deep inside the door, otherwise let it resolve the collision normally
+            if collision and min(collision.w, collision.h) > 2:
+                self.scene.on_death("Door crushed Guido ;(")
+
+            if self.scene.snake.occupies(self.position):
+                self.scene.on_death("Door crushed snake ;(")
+
+        # door has been deactivated
+        else:
+            self.kill()
 
 class Switch(Tile):
     def __init__(self, scene, position, index, connected_door_coords):
         self.index = index
+        self.active = False
         super().__init__(scene, position)
         self.scene = scene
-        self.active = False
         self.connected_door_coords = connected_door_coords
         self.connected_doors = []
 
     def _get_image(self):
+        if self.active:
+            return utils.load_image(self.get_name().lower() + str(self.index + 1) + "-active", "tiles")
+
         return utils.load_image(self.get_name().lower() + str(self.index + 1), "tiles")
 
     def update(self, dt):
@@ -73,12 +106,7 @@ class Switch(Tile):
         # actual update code
         self.active = self.scene.snake.occupies(self.position) or \
                       pygame.sprite.collide_rect(self, self.scene.snakecharmer)
+        self.image = self._get_image()
 
         for door in self.connected_doors:
-            if self.active:
-                door.kill()
-                self.scene.data.empty(door.position)
-
-            else:
-                self.scene.data.groups["Door"].add(door)
-                self.scene.data.set_at(door.position, door)
+            door.set_active(not self.active)

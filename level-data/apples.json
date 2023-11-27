@@ -2,7 +2,7 @@
   "name": "Short snake",
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
-    "W      WWW       WWW",
+    "WWWWWWWWWWWWW    WWW",
     "W   WWWWWWWWW    WWW",
     "W   WWWWWWWWW    WWW",
     "W        WW    G WWW",
@@ -18,17 +18,17 @@
     "WWWWWWWWWWWWWWWWWWWW"
   ],
   "snakedir": [
-    -1,
-    0
+    0,
+    1
   ],
   "snake": [
     [
-      4,
-      1
+      1,
+      4
     ],
     [
-      5,
-      1
+      1,
+      3
     ]
   ],
   "playerspawn": [
