@@ -1,9 +1,8 @@
 # Guido the Snake Charmer
 
-> Double jumps are unnecessary when you have a 10-foot python.
-*- Guido*
+To run from source *pygame-ce* **(not pygame)** must be installed.
 
-Platformer-Snake hybrid (appropriately programmed in Pygame).
+A short snake-platforming puzzler (appropriately coded in Python) made for Game Off 2023.
 
 ## Features:
 
@@ -18,10 +17,10 @@ Platformer-Snake hybrid (appropriately programmed in Pygame).
 
 - Snake: Arrow keys
 - Guido:
-    - A: Move left
-    - D: Move right
-    - W/Space: Jump
+  - A: Move left
+  - D: Move right
+  - W/Space: Jump
+- Restart level - R
+- Skip level - K
 
-Coded in Python 3.9.6 with Pygame Community Edition 2.3.2.
-
-To run from source *pygame-ce* **(not pygame)** must be installed.
+Made in Python 3.9.6 with Pygame Community Edition 2.3.2.
