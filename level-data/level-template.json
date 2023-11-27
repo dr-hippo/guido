@@ -1,0 +1,42 @@
+{
+  "name": "Template",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                  W",
+    "W                 GW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    1,
+    0
+  ],
+  "snake": [
+    [
+      3,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "playerspawn": [
+    1,
+    12
+  ]
+}

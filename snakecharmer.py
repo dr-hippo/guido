@@ -65,7 +65,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
     def groundcheck(self):
         # check if one pixel beneath left or right bottom corners is ground (wall, snake, or apple)
         rects = [sprite.rect for sprite in self.scene.snake[1:]] + \
-                self.scene.data.get_rects("Apple", "Wall")
+                self.scene.data.get_rects("Apple", "Wall", "Door")
 
         for rect in rects:
             if rect.collidepoint(self.rect.bottomleft) or \

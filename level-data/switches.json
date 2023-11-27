@@ -1,43 +1,39 @@
 {
-  "name": "Switches test",
+  "name": "Switches galore",
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
-    "W    ZZ          WWW",
-    "W   WWWWWWWWW    WWW",
-    "W   WWWWWWWWW    WWW",
-    "W        WW    G WWW",
-    "W         X  WWWWWWW",
-    "W      WWWWWWWWWWWWW",
-    "W         CC    WWWW",
-    "W         CC    WWWW",
-    "W         CC    WWWW",
-    "WW        WW  x WWWW",
-    "WWW      WWWWWWWWWWW",
-    "WWWWz  cWWWWWWWWWWWW",
-    "WWWWW  WWWWWWWWWWWWW",
+    "W  X  C  X  C      W",
+    "WCWWWWWWWWWWW      W",
+    "W WW        Z      W",
+    "W           Z      W",
+    "W          WWW   G W",
+    "W        WWWWWWWWWWW",
+    "W         A      WWW",
+    "W         A      WWW",
+    "W         A      WWW",
+    "W  WWWWW  WW x c WWW",
+    "WW  WWW  WWWWWWWWWWW",
+    "WWW  W  WWWWWWWWWWWW",
+    "WWWW z WWWWWWWWWWWWW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
   "snakedir": [
-    0,
-    1
+    -1,
+    0
   ],
   "snake": [
     [
-      3,
-      3
+      17,
+      1
     ],
     [
-      3,
-      2
-    ],
-    [
-      3,
+      18,
       1
     ]
   ],
   "playerspawn": [
-    1,
-    7
+    14,
+    9
   ],
   "switchdict": {
     "z": "Z",

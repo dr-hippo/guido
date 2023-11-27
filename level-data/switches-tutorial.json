@@ -1,0 +1,45 @@
+{
+  "name": "Switches 101",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWW              WWW",
+    "WWW              WWW",
+    "WWW            z WWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W                  W",
+    "W                Z W",
+    "W                Z W",
+    "W                ZGW",
+    "WWW  Z  Z  Z  Z  WWW",
+    "WWWW             WWW",
+    "WWWWW            WWW",
+    "WWWWWW           WWW",
+    "WWWWWWW          WWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    1,
+    0
+  ],
+  "snake": [
+    [
+      5,
+      3
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      3,
+      3
+    ]
+  ],
+  "playerspawn": [
+    1,
+    7
+  ],
+  "switchdict": {
+    "z": "Z"
+  }
+}
