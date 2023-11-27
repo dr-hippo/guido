@@ -51,17 +51,27 @@ class SceneManager:
         self.load(Level(gamestate.current_scene.name))
 
 
-class StartScreen(Scene):
+class UIScene(Scene):
     def __init__(self):
         super().__init__()
         self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
+        self.infofont = utils.load_font("Nunito-SemiBold", 20, align=pygame.FONT_CENTER)
 
+    def handle_events(self, events):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                # quit if escape key pressed
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+
+class StartScreen(UIScene):
     def update(self, dt):
         # TODO: Text animations (maybe)
         pass
 
     def render(self, window):
-        # TODO: Render title text and button
         window.fill((255, 255, 255))
         utils.render_text("Guido the\nSnake Charmer", self.titlefont,
                           (255, 0, 0), window, top=50, centerx=window.get_rect().centerx)
@@ -72,27 +82,18 @@ class StartScreen(Scene):
         pass
 
     def handle_events(self, events):
-        # TODO: Pipe mousedown events to button(s) so they can be triggered
+        super().handle_events(events)
+
         for event in events:
-            if event.type == pygame.KEYDOWN:
-                # quit if escape key pressed
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-
-                # if any other key pressed load level
-                else:
-                    self.manager.load(Level(cfg.LEVELS[0]))
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(Level(cfg.LEVELS[0]))
 
 
-class DeathScreen(Scene):
-    def __init__(self, deathcause):
+class DeathScreen(UIScene):
+    def __init__(self, deathcause, from_level):
         super().__init__()
-        self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
         self.deathcause = deathcause
+        self.from_level = from_level
 
     def update(self, dt):
         # TODO: Text animations (maybe)
@@ -104,33 +105,19 @@ class DeathScreen(Scene):
                           (255, 0, 0), window, top=60, centerx=window.get_rect().centerx)
         utils.render_text(self.deathcause, self.font,
                           (128, 128, 128), window, top=120, centerx=window.get_rect().centerx)
-        utils.render_text("-Any key to start again-", self.font,
+        utils.render_text("-Any key to respawn-", self.font,
                           (0, 0, 0), window, top=160, centerx=window.get_rect().centerx)
         pass
 
     def handle_events(self, events):
-        # TODO: Pipe mousedown events to button(s) so they can be triggered
+        super().handle_events(events)
+
         for event in events:
-            if event.type == pygame.KEYDOWN:
-                # quit if escape key pressed
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-
-                # if any other key pressed load level
-                else:
-                    self.manager.load(StartScreen())
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.manager.load(StartScreen())
+            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                self.manager.load(Level(self.from_level))
 
 
-class WinScreen(Scene):
-    def __init__(self):
-        super().__init__()
-        self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
-        self.infofont = utils.load_font("Nunito-SemiBold", 20, align=pygame.FONT_CENTER)
-
+class WinScreen(UIScene):
     def update(self, dt):
         # TODO: Text animations (maybe)
         pass
@@ -146,19 +133,10 @@ class WinScreen(Scene):
         pass
 
     def handle_events(self, events):
-        # TODO: Pipe mousedown events to button(s) so they can be triggered
+        super().handle_events(events)
+
         for event in events:
-            if event.type == pygame.KEYDOWN:
-                # quit if escape key pressed
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-
-                # if any other key pressed load level
-                else:
-                    self.manager.load(StartScreen())
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(StartScreen())
 
 
@@ -212,4 +190,4 @@ class Level(Scene):
             self.manager.load(Level(cfg.LEVELS[current_index + 1]))
 
     def on_death(self, cause="Mystery Death"):
-        self.manager.load(DeathScreen(cause))
+        self.manager.load(DeathScreen(cause, self.name))
