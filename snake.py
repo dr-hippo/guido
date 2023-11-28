@@ -148,6 +148,10 @@ class Snake:
             # if so, trigger death
             self.scene.on_death("Snake ran into a wall ;(")
 
+        if self.scene.data.get_group_collisions(self.blocks, "Door"):
+            # if so, trigger death
+            self.scene.on_death("Snake ran into a door ;(")
+
         # check if snake has collided with itself
         elif self.occupies(self[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")

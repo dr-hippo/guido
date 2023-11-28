@@ -9,6 +9,7 @@ from leveldata import LevelData
 from snakecharmer import SnakeCharmer
 import sys
 import os
+import math
 
 
 class Scene:
@@ -16,7 +17,7 @@ class Scene:
 
     def __init__(self):
         self.inittime = time.time()
-        self.font = utils.load_font("Nunito-SemiBold", 20)
+        self.font = utils.load_font("m6x11", 16)
 
         if not pygame.mixer.music.get_busy():
             pygame.mixer.music.load(os.path.join(utils.current_path, "audio", "bgm.wav"))
@@ -54,8 +55,11 @@ class SceneManager:
 class UIScene(Scene):
     def __init__(self):
         super().__init__()
-        self.titlefont = utils.load_font("Nunito-SemiBold", 36, align=pygame.FONT_CENTER)
-        self.infofont = utils.load_font("Nunito-SemiBold", 20, align=pygame.FONT_CENTER)
+        self.titlefont = utils.load_font("m6x11", 48, align=pygame.FONT_CENTER)
+        self.infofont = utils.load_font("m6x11", 32, align=pygame.FONT_CENTER)
+
+    def render(self, window):
+        self.draw_bg(window)
 
     def handle_events(self, events):
         for event in events:
@@ -65,6 +69,13 @@ class UIScene(Scene):
                     pygame.quit()
                     sys.exit()
 
+    def draw_bg(self, window):
+        bg_texture = utils.load_image("background")
+        for x in range(math.ceil(cfg.RESOLUTION[0] / bg_texture.get_width())):
+            for y in range(math.ceil(cfg.RESOLUTION[1] / bg_texture.get_height())):
+                window.blit(bg_texture, pygame.Rect(x * bg_texture.get_width(), y * bg_texture.get_height(),
+                                                    bg_texture.get_width(), bg_texture.get_height()))
+
 
 class StartScreen(UIScene):
     def update(self, dt):
@@ -72,13 +83,13 @@ class StartScreen(UIScene):
         pass
 
     def render(self, window):
-        window.fill((255, 255, 255))
+        super().render(window)
         utils.render_text("Guido the\nSnake Charmer", self.titlefont,
-                          (255, 0, 0), window, top=50, centerx=window.get_rect().centerx)
+                          (255, 0, 0), window, centery=100, centerx=window.get_rect().centerx)
         utils.render_text("-Any key to start-", self.font,
-                          (0, 0, 0), window, top=180, centerx=window.get_rect().centerx)
+                          (0, 0, 0), window, centery=180, centerx=window.get_rect().centerx)
         utils.render_text("-Esc to quit-", self.font,
-                          (0, 0, 0), window, top=200, centerx=window.get_rect().centerx)
+                          (0, 0, 0), window, centery=200, centerx=window.get_rect().centerx)
 
     def handle_events(self, events):
         super().handle_events(events)
@@ -99,13 +110,13 @@ class DeathScreen(UIScene):
         pass
 
     def render(self, window):
-        window.fill((255, 255, 255))
-        utils.render_text(f"RIP Guido + Snake", self.titlefont,
-                          (255, 0, 0), window, top=60, centerx=window.get_rect().centerx)
-        utils.render_text(self.deathcause, self.font,
-                          (128, 128, 128), window, top=120, centerx=window.get_rect().centerx)
+        super().render(window)
+        utils.render_text(f"RIP", self.titlefont,
+                          (255, 0, 0), window, centery=75, centerx=window.get_rect().centerx)
+        utils.render_text(self.deathcause, self.infofont,
+                          "#646464", window, centery=140, centerx=window.get_rect().centerx)
         utils.render_text("-Any key to respawn-", self.font,
-                          (0, 0, 0), window, top=160, centerx=window.get_rect().centerx)
+                          (0, 0, 0), window, centery=180, centerx=window.get_rect().centerx)
 
     def handle_events(self, events):
         super().handle_events(events)
@@ -121,13 +132,13 @@ class WinScreen(UIScene):
         pass
 
     def render(self, window):
-        window.fill((255, 255, 255))
-        utils.render_text(f"Well done! You've\npassed all {len(cfg.LEVELS)} levels!", self.titlefont,
-                          "#efc636", window, top=20, centerx=window.get_rect().centerx)
-        utils.render_text(f"Visit\ndrhippo.itch.io/guido\nfor news and updates.", self.infofont,
-                          (255, 0, 0), window, top=120, centerx=window.get_rect().centerx)
+        super().render(window)
+        utils.render_text(f"You've passed\nall {len(cfg.LEVELS)} levels!", self.titlefont,
+                          "#efc636", window, centery=60, centerx=window.get_rect().centerx)
+        utils.render_text(f"Visit\ndrhippo.itch.io/guido for\nnews and updates.", self.infofont,
+                          (255, 0, 0), window, centery=160, centerx=window.get_rect().centerx)
         utils.render_text("-Any key to go back to start-", self.font,
-                          (0, 0, 0), window, top=210, centerx=window.get_rect().centerx)
+                          (0, 0, 0), window, centery=220, centerx=window.get_rect().centerx)
 
     def handle_events(self, events):
         super().handle_events(events)
@@ -162,8 +173,8 @@ class Level(Scene):
 
         if self.get_time() < 3:
             utils.render_text(f"{self.index + 1}: {self.data.title}",
-                              utils.load_font("Nunito-SemiBold", 25), (255, 255, 255), window,
-                              bottomleft=window.get_rect().bottomleft)
+                              self.font, (255, 255, 255), window,
+                              top=2, centerx=window.get_rect().centerx)
 
     def draw_bg(self, window):
         window.fill(pygame.Color("#bce0f5"))

@@ -117,14 +117,14 @@ class Switch(Tile):
         # actual update code
         self.active = self.scene.snake.occupies(self.position) or \
                       pygame.sprite.collide_rect(self, self.scene.snakecharmer)
-        self.image = self._get_image()
 
         if self.active != active_buffer:
+            self.image = self._get_image()
             if self.active:
                 self.activate_sound.play()
 
             else:
                 self.deactivate_sound.play()
 
-        for door in self.connected_doors:
-            door.set_active(not self.active)
+            for door in self.connected_doors:
+                door.set_active(not self.active)
