@@ -28,6 +28,7 @@ class LevelData:
         datapath = os.path.join(utils.current_path, "level-data", filename + os.extsep + "json")
         rawdata = open(datapath)
         self._data = json.load(rawdata)
+        self.title = self._data["name"]
 
         self.glyphkey = {
             "W": "Wall",

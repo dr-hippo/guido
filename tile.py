@@ -87,6 +87,7 @@ class Door(Tile):
         else:
             self.kill()
 
+
 class Switch(Tile):
     def __init__(self, scene, position, index, connected_door_coords):
         self.index = index

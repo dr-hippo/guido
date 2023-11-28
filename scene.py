@@ -79,7 +79,6 @@ class StartScreen(UIScene):
                           (0, 0, 0), window, top=180, centerx=window.get_rect().centerx)
         utils.render_text("-Esc to quit-", self.font,
                           (0, 0, 0), window, top=200, centerx=window.get_rect().centerx)
-        pass
 
     def handle_events(self, events):
         super().handle_events(events)
@@ -107,7 +106,6 @@ class DeathScreen(UIScene):
                           (128, 128, 128), window, top=120, centerx=window.get_rect().centerx)
         utils.render_text("-Any key to respawn-", self.font,
                           (0, 0, 0), window, top=160, centerx=window.get_rect().centerx)
-        pass
 
     def handle_events(self, events):
         super().handle_events(events)
@@ -130,7 +128,6 @@ class WinScreen(UIScene):
                           (255, 0, 0), window, top=120, centerx=window.get_rect().centerx)
         utils.render_text("-Any key to go back to start-", self.font,
                           (0, 0, 0), window, top=210, centerx=window.get_rect().centerx)
-        pass
 
     def handle_events(self, events):
         super().handle_events(events)
@@ -144,6 +141,7 @@ class Level(Scene):
     def __init__(self, name):
         super().__init__()
         self.name = name
+        self.index = cfg.LEVELS.index(self.name)
         self.data = LevelData(self, name)
         self.snake = Snake(self)
         playerspawn_world_space = Vector2((self.data.playerspawn.x + 0.5) * cfg.GRIDSIZE,  # center of cell vertically
@@ -161,6 +159,11 @@ class Level(Scene):
         window.fblits(self.data.get_layout_to_render())
         self.snake.render(window)
         window.blit(self.snakecharmer.image, self.snakecharmer.rect)
+
+        if self.get_time() < 3:
+            utils.render_text(f"{self.index + 1}: {self.data.title}",
+                              utils.load_font("Nunito-SemiBold", 25), (255, 255, 255), window,
+                              bottomleft=window.get_rect().bottomleft)
 
     def draw_bg(self, window):
         window.fill(pygame.Color("#bce0f5"))
@@ -180,14 +183,11 @@ class Level(Scene):
             self.snakecharmer.handle_events(events)
 
     def to_nextlevel(self):
-        current_index = cfg.LEVELS.index(self.name)
-        if current_index == len(cfg.LEVELS) - 1:
-            pass
-            # self.manager.load()
+        if self.index == len(cfg.LEVELS) - 1:
             self.manager.load(WinScreen())
 
         else:
-            self.manager.load(Level(cfg.LEVELS[current_index + 1]))
+            self.manager.load(Level(cfg.LEVELS[self.index + 1]))
 
     def on_death(self, cause="Mystery Death"):
         self.manager.load(DeathScreen(cause, self.name))
