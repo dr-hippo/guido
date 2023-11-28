@@ -2,6 +2,6 @@
 /.idea/
 /build/
 /dist/
-/audio/.unexported
-/images/.xcf/
+*.ceol
+*.xcf
 *.spec
