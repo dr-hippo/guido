@@ -2,6 +2,8 @@ import pygame
 import sys
 import os
 import gamestate
+import fnmatch
+from pathlib import Path
 
 if not pygame.get_init():
     pygame.init()
@@ -13,6 +15,15 @@ if getattr(sys, 'frozen', False):  # PyInstaller adds this attribute
 else:
     # running in normal python environment
     current_path = os.path.dirname(__file__)
+
+
+def get_filenames(*path, filetype="png"):
+    filenames = []
+    for file in os.listdir(os.path.join(current_path, os.path.join(*path))):
+        if fnmatch.fnmatch(file, "*." + filetype):
+            filenames.append(Path(file).stem)
+
+    return filenames
 
 
 def load_image(name, *subfolders, filetype="png"):

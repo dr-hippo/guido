@@ -13,7 +13,12 @@ class SnakeCharmer(Sprite, PhysicsBody):
         Sprite.__init__(self)
         PhysicsBody.__init__(self, position, velocity=Vector2(0, 0), acceleration=Vector2(0, 0))
         self.scene = scene
-        self.image = utils.load_image("snakecharmer", "snakecharmer")
+        self.images = {}
+
+        for imagename in utils.get_filenames("images", "snakecharmer", filetype="png"):
+            self.images[imagename] = utils.load_image(imagename, "snakecharmer")
+
+        self.image = self.images["right"]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(midbottom=position)
         self.movingleft = False
@@ -29,9 +34,11 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
                 if event.key == pygame.K_a:
                     self.movingleft = True
+                    self.image = self.images["left"]
 
                 if event.key == pygame.K_d:
                     self.movingright = True
+                    self.image = self.images["right"]
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
