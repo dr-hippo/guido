@@ -15,7 +15,7 @@ class SnakeBlock(Sprite):
     def __init__(self, position):
         super().__init__()
         self.position = position
-        self.image = utils.load_image("snake", "snake")
+        self.image = pygame.surface.Surface((cfg.GRIDSIZE, cfg.GRIDSIZE))
         self.mask = pygame.mask.Mask((cfg.GRIDSIZE, cfg.GRIDSIZE))
         self.rect = self.image.get_rect(topleft=position * cfg.GRIDSIZE)
 
@@ -30,30 +30,30 @@ class SnakeBlock(Sprite):
         rel_prevblock = prev_block - self.position if prev_block else None
         rel_nextblock = next_block - self.position if next_block else None
 
-        block_state = ""
+        block_state = "block-"  # assume this block is not head or tail unless otherwise set
 
         if cross_equals(rel_prevblock, rel_nextblock, Vector2(0, -1), Vector2(0, 1)):
-            block_state = "block-vertical"
+            block_state += "vertical"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(1, 0)):
-            block_state = "block-horizontal"
+            block_state += "horizontal"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(0, 1)):
-            block_state = "block-left-down"
+            block_state += "left-down"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(1, 0), Vector2(0, 1)):
-            block_state = "block-right-down"
+            block_state += "right-down"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(-1, 0), Vector2(0, -1)):
-            block_state = "block-left-up"
+            block_state += "left-up"
 
         elif cross_equals(rel_prevblock, rel_nextblock, Vector2(1, 0), Vector2(0, -1)):
-            block_state = "block-right-up"
+            block_state += "right-up"
 
         # no previous block --> this block is the head
         # TODO: if I ever update to python 3.10, use a match-case block
         elif not rel_prevblock:
-            block_state += "-head-"
+            block_state = "head-"
             if rel_nextblock == Vector2(0, 1):
                 block_state += "up"
 
@@ -69,7 +69,7 @@ class SnakeBlock(Sprite):
         # no next block --> this block is the tail
         # TODO: if I ever update to python 3.10, use a match-case block
         elif not rel_nextblock:
-            block_state += "-tail-"
+            block_state = "tail-"
             if rel_prevblock == Vector2(0, 1):
                 block_state += "up"
 
@@ -82,12 +82,8 @@ class SnakeBlock(Sprite):
             elif rel_prevblock == Vector2(-1, 0):
                 block_state += "right"
 
-        if block_state:
-            self.image = utils.load_image("snake" + block_state, "snake")
-            self.mask = pygame.mask.from_surface(self.image)
-
-        else:
-            self.image = utils.load_image("snake", "snake")
+        self.image = utils.load_image(block_state, "snake")
+        self.mask = pygame.mask.from_surface(self.image)
 
 
 class Snake:
@@ -103,8 +99,8 @@ class Snake:
         }
         self.time_since_last_move = 0.0
 
-        self.next_tile_image = utils.load_image("snake-next-tile")
-        self.next_tile_alert_image = utils.load_image("snake-next-tile-alert")
+        self.next_tile_image = utils.load_image("next-tile", "snake")
+        self.next_tile_alert_image = utils.load_image("next-tile-alert", "snake")
 
         self.position_to_add_block = self[-1].position
 
