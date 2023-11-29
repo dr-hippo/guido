@@ -13,18 +13,21 @@ class SnakeCharmer(Sprite, PhysicsBody):
         Sprite.__init__(self)
         PhysicsBody.__init__(self, position, velocity=Vector2(0, 0), acceleration=Vector2(0, 0))
         self.scene = scene
-        self.images = {}
 
+        # TODO: probably could refactor this
+        self.images = {}
         for imagename in utils.get_filenames("images", "snakecharmer", filetype="png"):
             self.images[imagename] = utils.load_image(imagename, "snakecharmer")
+
+        self.sounds = {}
+        for soundname in utils.get_filenames("audio", "snakecharmer", filetype="mp3"):
+            self.sounds[soundname] = utils.load_audio(soundname, "snakecharmer", filetype="mp3")
 
         self.image = self.images["right"]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(midbottom=position)
         self.movingleft = False
         self.movingright = False
-
-        self.jump_sound = utils.load_audio("jump", "snakecharmer")
 
     def handle_events(self, events):
         for event in events:
@@ -65,7 +68,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         # TODO: this is a temporary fix, need to make addforce consistent
         self.velocity.y = -cfg.SNAKECHARMER_JUMP_FORCE
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
-        self.jump_sound.play()
+        self.sounds["jump"].play()
 
     def get_collisions(self):
         collided_tiles = self.scene.data.get_sprite_collisions(self, "Wall", "Apple", "Door")
@@ -88,6 +91,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
         # if player hits snake head, die
         if pygame.sprite.collide_mask(self, self.scene.snake[0]):
             self.scene.on_death("Snake ate Guido ;(")
+            self.sounds["chewed"].play()
 
         for rect in self.get_collisions():
             # if this has already been resolved, no need to resolve

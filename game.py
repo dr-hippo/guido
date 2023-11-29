@@ -12,6 +12,7 @@ import utilities as utils
 import scene
 
 # game initialisation
+pygame.mixer.pre_init(channels=16)  # get more channels so sounds don't get dropped
 pygame.init()
 pygame.display.set_caption('Guido the Snake Charmer')
 icon = pygame.image.load(os.path.join(utils.current_path, "images", "topbar-icon.png"))

@@ -30,9 +30,11 @@ class Wall(Tile):
 
 class Apple(Tile):
     def update(self, dt):
+        # if snake eats this, add block to it and then destroy self
         if self.scene.snake.occupies(self.position):
             self.scene.snake.add_block()
             self.scene.data.empty(self.position)
+            utils.load_audio("crunch", "environment").play()
             self.kill()
 
 
@@ -53,6 +55,7 @@ class Door(Tile):
         self.index = index
         self._active = True
         super().__init__(scene, position)
+        self.crush_sound = utils.load_audio("door-crush", "environment")
 
     def _get_image(self):
         if self.get_active():
@@ -79,9 +82,11 @@ class Door(Tile):
             # only kill player if it's deep inside the door, otherwise let it resolve the collision normally
             if collision and min(collision.w, collision.h) > 2:
                 self.scene.on_death("Door crushed Guido ;(")
+                self.crush_sound.play()
 
             if self.scene.snake.occupies(self.position):
                 self.scene.on_death("Door crushed snake ;(")
+                self.crush_sound.play()
 
         # door has been deactivated
         else:
@@ -118,6 +123,7 @@ class Switch(Tile):
         self.active = self.scene.snake.occupies(self.position) or \
                       pygame.sprite.collide_rect(self, self.scene.snakecharmer)
 
+        # if active state isn't the same as before, update image/connected doors and play appropriate sound
         if self.active != active_buffer:
             self.image = self._get_image()
             if self.active:

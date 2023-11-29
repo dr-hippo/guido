@@ -108,7 +108,12 @@ class Snake:
 
         self.position_to_add_block = self[-1].position
 
-        self.move_sound = utils.load_audio("slither", "snake")
+        self.sounds = {}
+        for soundname in utils.get_filenames("audio", "snake", filetype="mp3"):
+            self.sounds[soundname] = utils.load_audio(soundname, "snake", filetype="mp3")
+
+        # because direction changes are spammable, get a separate channel so it only interrupts itself
+        self.change_direction_channel = pygame.mixer.find_channel()
 
         self.update_block_images()
 
@@ -147,16 +152,18 @@ class Snake:
         if self.scene.data.get_group_collisions(self.blocks, "Wall"):
             # if so, trigger death
             self.scene.on_death("Snake ran into a wall ;(")
+            self.sounds["hit-wall"].play()
 
         if self.scene.data.get_group_collisions(self.blocks, "Door"):
             # if so, trigger death
             self.scene.on_death("Snake ran into a door ;(")
+            self.sounds["hit-wall"].play()
 
         # check if snake has collided with itself
         elif self.occupies(self[0].position, startindex=1):
             self.scene.on_death("Snake ran into itself ;&")
 
-        self.move_sound.play()
+        self.sounds["slither"].play()
 
         self.time_since_last_move = 0
 
@@ -184,6 +191,7 @@ class Snake:
                 if self[0].position + self.direction_dict[event.key] != self[1].position and \
                         self.direction_dict[event.key] != self.direction:
                     self.direction = self.direction_dict[event.key]
+                    self.change_direction_channel.play(self.sounds["change-direction"])
 
     def render(self, window):
         self.blocks.draw(window)
