@@ -1,12 +1,12 @@
 {
-  "name": "Switches galore",
+  "name": "Switches Galore",
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
     "W  X  C  X  C      W",
-    "WCWWWWWWWWWWW      W",
-    "W WW        Z      W",
-    "W           Z      W",
-    "W          WWW   G W",
+    "WCWWWWWWWWWWWWWW   W",
+    "W WW        Z XC   W",
+    "W           Z XC   W",
+    "W          WWWWW G W",
     "W        WWWWWWWWWWW",
     "W         A      WWW",
     "W         A      WWW",

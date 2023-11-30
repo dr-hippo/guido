@@ -10,29 +10,33 @@
     "W                  W",
     "W                  W",
     "W                  W",
-    "W                  W",
     "W                G W",
-    "WWW  W  W  W  WWWWWW",
-    "WWWW          WWWWWW",
-    "WWWWW         WWWWWW",
+    "W             WWWWWW",
+    "WWWWWW        WWWWWW",
+    "WWWWWW        WWWWWW",
+    "WWWWWW        WWWWWW",
     "WWWWWWWWWWWWWWWWWWWW"
   ],
   "snakedir": [
-    1,
+    -1,
     0
   ],
   "snake": [
     [
-      3,
-      1
+      9,
+      13
     ],
     [
-      2,
-      1
+      10,
+      13
     ],
     [
-      1,
-      1
+      11,
+      13
+    ],
+    [
+      12,
+      13
     ]
   ],
   "playerspawn": [

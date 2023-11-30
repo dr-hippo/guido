@@ -1,0 +1,38 @@
+{
+  "name": "Floating Orchard",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WW               G W",
+    "WW  A A A A A  WWWWW",
+    "WW         A   WWWWW",
+    "WW  A A A A A  WWWWW",
+    "WW       A     WWWWW",
+    "WW  A A A A A  WWWWW",
+    "WW     A       WWWWW",
+    "WW  A A A A A  WWWWW",
+    "WW   A            WW",
+    "WW  A A A A A     WW",
+    "WW            W   WW",
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    -1,
+    0
+  ],
+  "snake": [
+    [
+      10,
+      2
+    ],
+    [
+      11,
+      2
+    ]
+  ],
+  "playerspawn": [
+    17,
+    11
+  ]
+}

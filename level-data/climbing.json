@@ -1,0 +1,50 @@
+{
+  "name": "The Climb",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "W                  W",
+    "W                  W",
+    "WWW         G      W",
+    "WWWWW     WWWWW    W",
+    "WWWWWW     WWW     W",
+    "WWWWWW            WW",
+    "WWWWW            WWW",
+    "WWW      WW      WWW",
+    "W       WWWW      WW",
+    "W       WWWW       W",
+    "W        WW      WWW",
+    "W               WWWW",
+    "W               WWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    0,
+    1
+  ],
+  "snake": [
+    [
+      1,
+      12
+    ],
+    [
+      1,
+      11
+    ],
+    [
+      1,
+      10
+    ],
+    [
+      1,
+      9
+    ],
+    [
+      2,
+      9
+    ]
+  ],
+  "playerspawn": [
+    3,
+    12
+  ]
+}

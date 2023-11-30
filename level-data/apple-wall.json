@@ -4,15 +4,15 @@
     "WWWWWWWWWWWWWWWWWWWW",
     "WWWWWWWWWWWWW    WWW",
     "WWWWWWWWWWWWW    WWW",
-    "WWWWWWWWWWW A    WWW",
+    "WWWWWWWWWWWWW    WWW",
     "W           A  G WWW",
-    "W           AWWWWWWW",
     "W           WWWWWWWW",
-    "W            WWWWWWW",
-    "WWAAAAAA     WWWWWWW",
-    "W      AAAAAWWWWWWWW",
-    "W      A    A     WW",
-    "W      A    A     WW",
+    "W           WWWWWWWW",
+    "W           WWWWWWWW",
+    "WW          WWWWWWWW",
+    "W           WWWWWWWW",
+    "W           WWWWWWWW",
+    "W           WWWWWWWW",
     "W      A    A     WW",
     "WWWWWWWW    A     WW",
     "WWWWWWWWWWWWWWWWWWWW"
@@ -28,10 +28,6 @@
     ],
     [
       2,
-      4
-    ],
-    [
-      1,
       4
     ]
   ],

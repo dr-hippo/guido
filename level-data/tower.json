@@ -1,0 +1,46 @@
+{
+  "name": "Hollow Tower",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWWWW        GWWWW",
+    "WWWWWWW       WWWWWW",
+    "WWWWWWWWX   ZWWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWWA   AWWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWWZ   XWWWWWWW",
+    "WWW          WWWWWWW",
+    "WWW     x   zWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    0,
+    -1
+  ],
+  "snake": [
+    [
+      10,
+      11
+    ],
+    [
+      10,
+      12
+    ],
+    [
+      10,
+      13
+    ]
+  ],
+  "playerspawn": [
+    3,
+    13
+  ],
+  "switchdict": {
+    "z": "Z",
+    "x": "X"
+  }
+}

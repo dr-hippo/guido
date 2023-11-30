@@ -1,0 +1,47 @@
+{
+  "name": "The Drop",
+  "layout": [
+    "WWWWWWWWWWWWWWWWWWWW",
+    "WWWWW          WWWWW",
+    "WWWWW       c  WWWWW",
+    "WWWWWWWW    WWWWWWWW",
+    "WWWWWWWWZZZZWWWWWWWW",
+    "WWWWWWW     WWWWWWWW",
+    "WWWWWWWx    WWWWWWWW",
+    "WWWWWWWWXXXXWWWWWWWW",
+    "WWWWWWWW     WWWWWWW",
+    "WWWWWWWW    zWWWWWWW",
+    "WWWWWWWWCCCCWWWWWWWW",
+    "WWWWWWWW    WWWWWWWW",
+    "WWWWWWWW         WWW",
+    "WWWWWWWW        GWWW",
+    "WWWWWWWWWWWWWWWWWWWW"
+  ],
+  "snakedir": [
+    -1,
+    0
+  ],
+  "snake": [
+    [
+      11,
+      13
+    ],
+    [
+      12,
+      13
+    ],
+    [
+      13,
+      13
+    ]
+  ],
+  "playerspawn": [
+    5,
+    1
+  ],
+  "switchdict": {
+    "z": "Z",
+    "x": "X",
+    "c": "C"
+  }
+}
