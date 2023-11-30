@@ -20,7 +20,7 @@ class Scene:
         self.font = utils.load_font("m6x11", 16)
 
         if not pygame.mixer.music.get_busy():
-            pygame.mixer.music.load(os.path.join(utils.current_path, "audio", "bgm.wav"))
+            pygame.mixer.music.load(os.path.join(utils.current_path, "audio", "bgm.mp3"))
             pygame.mixer.music.play(loops=-1)
 
     def update(self, dt):
