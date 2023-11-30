@@ -3,7 +3,7 @@
   "layout": [
     "WWWWWWWWWWWWWWWWWWWW",
     "WWWWWWWWWWWWWWWWWWWW",
-    "WW               G W",
+    "WW               GWW",
     "WW  A A A A A  WWWWW",
     "WW         A   WWWWW",
     "WW  A A A A A  WWWWW",
@@ -33,6 +33,6 @@
   ],
   "playerspawn": [
     17,
-    11
+    12
   ]
 }

@@ -3,7 +3,6 @@ from pygame import Vector2
 import gamestate
 import utilities as utils
 import config as cfg
-import time
 from snake import Snake
 from leveldata import LevelData
 from snakecharmer import SnakeCharmer
@@ -16,12 +15,14 @@ class Scene:
     """Base class for game scenes. Inherit and override the provided methods."""
 
     def __init__(self):
-        self.inittime = time.time()
+        self.time = 0
         self.font = utils.load_font("m6x11", 16)
 
         if not pygame.mixer.music.get_busy():
             pygame.mixer.music.load(os.path.join(utils.current_path, "audio", "bgm.mp3"))
             pygame.mixer.music.play(loops=-1)
+
+        gamestate.timescale = 1
 
     def update(self, dt):
         raise NotImplementedError
@@ -31,9 +32,6 @@ class Scene:
 
     def handle_events(self, events):
         raise NotImplementedError
-
-    def get_time(self):
-        return time.time() - self.inittime
 
 
 class SceneManager:
@@ -80,7 +78,7 @@ class UIScene(Scene):
 class StartScreen(UIScene):
     def update(self, dt):
         # TODO: Text animations (maybe)
-        pass
+        self.time += dt
 
     def render(self, window):
         super().render(window)
@@ -107,7 +105,7 @@ class DeathScreen(UIScene):
 
     def update(self, dt):
         # TODO: Text animations (maybe)
-        pass
+        self.time += dt
 
     def render(self, window):
         super().render(window)
@@ -129,7 +127,7 @@ class DeathScreen(UIScene):
 class WinScreen(UIScene):
     def update(self, dt):
         # TODO: Text animations (maybe)
-        pass
+        self.time += dt
 
     def render(self, window):
         super().render(window)
@@ -158,8 +156,10 @@ class Level(Scene):
         playerspawn_world_space = Vector2((self.data.playerspawn.x + 0.5) * cfg.GRIDSIZE,  # center of cell vertically
                                           (self.data.playerspawn.y + 1) * cfg.GRIDSIZE)  # bottom of cell horizontally
         self.snakecharmer = SnakeCharmer(self, playerspawn_world_space)
+        gamestate.timescale = 0
 
     def update(self, dt):
+        self.time += dt
         self.snake.update(dt)
         self.snakecharmer.update(dt)
         for group in self.data.groups.values():
@@ -172,13 +172,19 @@ class Level(Scene):
         window.blit(self.snakecharmer.image, self.snakecharmer.rect)
 
         # show level index/name and controls hint for the first 4 seconds
-        if self.get_time() < 4:
+        if self.time < 4:
             utils.render_text(f"{self.index + 1}/{len(cfg.LEVELS)}: {self.data.title}",
                               self.font, (255, 255, 255), window,
                               top=2, centerx=window.get_rect().centerx)
             utils.render_text("C to see controls",
                               self.font, (255, 255, 255), window,
                               bottom=window.get_rect().bottom + 2, centerx=window.get_rect().centerx)
+
+        # if the player hasn't made any inputs yet, show prompt
+        if self.time == 0:
+            utils.render_text("Press any key to start level",
+                              self.font, "#f7a611", window,
+                              top=18, centerx=window.get_rect().centerx)
 
         # show controls help text if C is pressed
         if pygame.key.get_pressed()[pygame.K_c]:
@@ -196,6 +202,7 @@ ESC: Back to menu"""
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
+                gamestate.timescale = 1
                 if event.key == pygame.K_ESCAPE:
                     self.manager.load(StartScreen())
 
