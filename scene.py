@@ -86,16 +86,16 @@ class StartScreen(UIScene):
         super().render(window)
         utils.render_text("Guido the\nSnake Charmer", self.titlefont,
                           (255, 0, 0), window, centery=100, centerx=window.get_rect().centerx)
-        utils.render_text("-Any key to start-", self.font,
+        utils.render_text("-SPACE to start-", self.font,
                           (0, 0, 0), window, centery=180, centerx=window.get_rect().centerx)
-        utils.render_text("-Esc to quit-", self.font,
+        utils.render_text("-ESC to quit-", self.font,
                           (0, 0, 0), window, centery=200, centerx=window.get_rect().centerx)
 
     def handle_events(self, events):
         super().handle_events(events)
 
         for event in events:
-            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(Level(cfg.LEVELS[0]))
 
 
@@ -114,15 +114,15 @@ class DeathScreen(UIScene):
         utils.render_text(f"RIP", self.titlefont,
                           (255, 0, 0), window, centery=75, centerx=window.get_rect().centerx)
         utils.render_text(self.deathcause, self.infofont,
-                          "#646464", window, centery=140, centerx=window.get_rect().centerx)
-        utils.render_text("-Any key to respawn-", self.font,
+                          "#444444", window, centery=130, centerx=window.get_rect().centerx)
+        utils.render_text("-SPACE to try again-", self.font,
                           (0, 0, 0), window, centery=180, centerx=window.get_rect().centerx)
 
     def handle_events(self, events):
         super().handle_events(events)
 
         for event in events:
-            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(Level(self.from_level))
 
 
@@ -137,14 +137,14 @@ class WinScreen(UIScene):
                           "#efc636", window, centery=60, centerx=window.get_rect().centerx)
         utils.render_text(f"Visit\ndrhippo.itch.io/guido for\nnews and updates.", self.infofont,
                           (255, 0, 0), window, centery=160, centerx=window.get_rect().centerx)
-        utils.render_text("-Any key to go back to start-", self.font,
+        utils.render_text("-SPACE to play again-", self.font,
                           (0, 0, 0), window, centery=220, centerx=window.get_rect().centerx)
 
     def handle_events(self, events):
         super().handle_events(events)
 
         for event in events:
-            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
                 self.manager.load(StartScreen())
 
 
@@ -171,10 +171,24 @@ class Level(Scene):
         self.snake.render(window)
         window.blit(self.snakecharmer.image, self.snakecharmer.rect)
 
-        if self.get_time() < 3:
-            utils.render_text(f"{self.index + 1}: {self.data.title}",
+        # show level index/name and controls hint for the first 4 seconds
+        if self.get_time() < 4:
+            utils.render_text(f"{self.index + 1}/{len(cfg.LEVELS)}: {self.data.title}",
                               self.font, (255, 255, 255), window,
                               top=2, centerx=window.get_rect().centerx)
+            utils.render_text("C to see controls",
+                              self.font, (255, 255, 255), window,
+                              bottom=window.get_rect().bottom + 2, centerx=window.get_rect().centerx)
+
+        # show controls help text if C is pressed
+        if pygame.key.get_pressed()[pygame.K_c]:
+            controls_help = """Arrows: Snake
+W, A, D: Guido
+R: Restart level
+ESC: Back to menu"""
+            utils.render_text(controls_help,
+                              self.font, (255, 255, 255), window,
+                              top=2, left=2)
 
     def draw_bg(self, window):
         window.fill(pygame.Color("#bce0f5"))
@@ -182,6 +196,9 @@ class Level(Scene):
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.manager.load(StartScreen())
+
                 # reload key
                 if event.key == pygame.K_r:
                     self.manager.reload_level()

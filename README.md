@@ -17,10 +17,10 @@ A short snake-platforming puzzler (appropriately coded in Python) made for Game 
 
 - Snake: Arrow keys
 - Guido:
-  - A: Move left
-  - D: Move right
-  - W/Space: Jump
-- Restart level - R
-- Skip level - K
+  - Move left: A
+  - Move right: D
+  - Jump: W
+- Restart level: R
+- Skip level: K
 
 Made in Python 3.9.6 with Pygame Community Edition 2.3.2.

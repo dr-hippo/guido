@@ -32,7 +32,7 @@ class SnakeCharmer(Sprite, PhysicsBody):
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_w or event.key == pygame.K_SPACE) and self.groundcheck():
+                if event.key == pygame.K_w and self.groundcheck():
                     self.jump()
 
                 if event.key == pygame.K_a:
