@@ -23,11 +23,16 @@ class SnakeCharmer(Sprite, PhysicsBody):
         for soundname in utils.get_filenames("audio", "snakecharmer", filetype="mp3"):
             self.sounds[soundname] = utils.load_audio(soundname, "snakecharmer", filetype="mp3")
 
-        self.image = self.images["right"]
+        self.jump_sound_channel = pygame.mixer.find_channel()
+
+        self.image = self.images["right0"]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(midbottom=position)
         self.movingleft = False
         self.movingright = False
+        self.image_direction = "right"
+
+        self.time_since_walk_start = 0
 
     def handle_events(self, events):
         for event in events:
@@ -37,22 +42,27 @@ class SnakeCharmer(Sprite, PhysicsBody):
 
                 if event.key == pygame.K_a:
                     self.movingleft = True
-                    self.image = self.images["left"]
+                    self.image_direction = "left"
 
                 if event.key == pygame.K_d:
                     self.movingright = True
-                    self.image = self.images["right"]
+                    self.image_direction = "right"
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     self.movingleft = False
+                    self.time_since_walk_start = 0
 
                 if event.key == pygame.K_d:
                     self.movingright = False
+                    self.time_since_walk_start = 0
 
     def update(self, dt):
         Sprite.update(self)
         PhysicsBody.update(self, dt)
+
+        # change image depending on direction and grounded state
+        self.image = self._get_image()
 
         # TODO: make this use PhysicsBody.addforce() once that works
         if self.movingleft:
@@ -61,14 +71,34 @@ class SnakeCharmer(Sprite, PhysicsBody):
         if self.movingright:
             self.position.x += cfg.SNAKECHARMER_MOVE_SPEED * cfg.GRIDSIZE * dt
 
+        if self.movingleft or self.movingright:
+            self.time_since_walk_start += dt
+
         self.rect.midbottom = self.position
         self.handle_collisions()
+
+    def _get_image(self):
+        # if grounded, get walk frames, otherwise display jump/fall sprites
+        if self.groundcheck():
+            # 3 frames, change every 1/6 secs
+            frame_index = round(self.time_since_walk_start * 6) % 3
+            name = self.image_direction + str(frame_index)
+
+        # if jumping up, display jump frame
+        elif self.velocity.y < 0:
+            name = self.image_direction + "-jump"
+
+        # otherwise player is falling, display fall frames
+        else:
+            name = self.image_direction + "-drop"
+
+        return self.images[name]
 
     def jump(self):
         # TODO: this is a temporary fix, need to make addforce consistent
         self.velocity.y = -cfg.SNAKECHARMER_JUMP_FORCE
         # self.addforce(Vector2(0, -cfg.SNAKECHARMER_JUMP_FORCE), impulse=True)
-        self.sounds["jump"].play()
+        self.jump_sound_channel.play(self.sounds["jump"])
 
     def get_collisions(self):
         collided_tiles = self.scene.data.get_sprite_collisions(self, "Wall", "Apple", "Door")
