@@ -183,8 +183,9 @@ class Level(Scene):
         # if the player hasn't made any inputs yet, show prompt
         if self.time == 0:
             utils.render_text("Press any key to start level",
-                              self.font, "#f7a611", window,
-                              top=18, centerx=window.get_rect().centerx)
+                              self.font, "#ffffff", window,
+                              centerx=window.get_rect().centerx,
+                              centery=window.get_rect().centery + 2)
 
         # show controls help text if C is pressed
         if pygame.key.get_pressed()[pygame.K_c]:
@@ -201,7 +202,8 @@ ESC: Back to menu"""
 
     def handle_events(self, events):
         for event in events:
-            if event.type == pygame.KEYDOWN:
+            # don't start game if player's just trying to look at controls
+            if event.type == pygame.KEYDOWN and event.key != pygame.K_c:
                 gamestate.timescale = 1
                 if event.key == pygame.K_ESCAPE:
                     self.manager.load(StartScreen())
